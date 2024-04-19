@@ -21,10 +21,13 @@ namespace Tudormobile.Wpf
         {
             // construct...
             var app = System.Windows.Application.Current;
-            app.Startup += App_Startup;
-            app.Activated += App_Activated;
-            app.LoadCompleted += App_LoadCompleted;
-            app.FragmentNavigation += App_FragmentNavigation;
+            if (app != null)
+            {
+                app.Startup += App_Startup;
+                app.Activated += App_Activated;
+                app.LoadCompleted += App_LoadCompleted;
+                app.FragmentNavigation += App_FragmentNavigation;
+            }
         }
 
         private void App_FragmentNavigation(object sender, System.Windows.Navigation.FragmentNavigationEventArgs e)
