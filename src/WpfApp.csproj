@@ -1,0 +1,63 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <!-- Version -->
+  <PropertyGroup>
+    <build>$([System.DateTime]::Now.ToString('yyMM'))</build>
+    <rev>$([System.DateTime]::Now.ToString('100dd'))</rev>
+    <ver>$([System.IO.File]::ReadAllText('$(MSBuildThisFileDirectory)\..\version.txt').Trim())</ver>
+    <AssemblyName>Tudormobile.$(MSBuildProjectName)</AssemblyName>
+    <RootNamespace>Tudormobile.Wpf</RootNamespace>
+  </PropertyGroup>
+
+  <!-- Package Properties -->
+  <PropertyGroup>
+    <AssemblyVersion>$(ver).$(build).$(rev)</AssemblyVersion>
+    <Version>$(ver).$(build)</Version>
+    <Company>Tudormobile, LLC</Company>
+    <Authors>WH Tudor</Authors>
+    <Product>Tudormobile WpfApp</Product>
+    <Description>Tudormobile WPF Application container</Description>
+    <Copyright>Copyright © 2024 Tudormobile, LLC</Copyright>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageTags>WPF;WPFApplication;Tudormobile;Windows</PackageTags>
+    <RepositoryUrl>https://github.com/tudormobile/WpfApp</RepositoryUrl>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="WpfApp.APITests\**" />
+    <Compile Remove="WpfApp.Tests\**" />
+    <EmbeddedResource Remove="WpfApp.APITests\**" />
+    <EmbeddedResource Remove="WpfApp.Tests\**" />
+    <None Remove="WpfApp.APITests\**" />
+    <None Remove="WpfApp.Tests\**" />
+    <Page Remove="WpfApp.APITests\**" />
+    <Page Remove="WpfApp.Tests\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\docs\README.md" Pack="true" PackagePath="\" />
+    <InternalsVisibleTo Include="WpfApp.Tests" />
+  </ItemGroup>
+
+  <Target Name="WriteVersion" BeforeTargets="Build" Condition="'$(Configuration)' == 'Release'">
+    <WriteLinesToFile Lines="$(Version)" File="$(BaseOutputPath)\$(Configuration)\ver.txt" Overwrite="true" />
+  </Target>
+
+</Project>

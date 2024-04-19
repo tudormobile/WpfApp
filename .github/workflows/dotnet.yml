@@ -1,9 +1,7 @@
-# This workflow will build a .NET project
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
-
-name: .NET
+name: Build and Deploy
 
 on:
+  workflow_dispatch:
   push:
     branches: [ "main" ]
   pull_request:
@@ -11,8 +9,8 @@ on:
 
 jobs:
   build:
-
-    runs-on: ubuntu-latest
+    name: Build and Test Library
+    runs-on: windows-latest
 
     steps:
     - uses: actions/checkout@v4
@@ -20,9 +18,11 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
-    - name: Restore dependencies
-      run: dotnet restore
+    - name: Unit tests
+      run: dotnet test
     - name: Build
-      run: dotnet build --no-restore
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet build -c Release
+    - name: Documentation
+      run: |
+        dotnet tool update -g docfx
+        docfx docs/docfx.json
