@@ -56,6 +56,11 @@
     <InternalsVisibleTo Include="WpfApp.Tests" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
+  </ItemGroup>
+
   <Target Name="WriteVersion" BeforeTargets="Build" Condition="'$(Configuration)' == 'Release'">
     <WriteLinesToFile Lines="$(Version)" File="$(BaseOutputPath)\$(Configuration)\ver.txt" Overwrite="true" />
   </Target>

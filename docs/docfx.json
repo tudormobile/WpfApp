@@ -36,8 +36,9 @@
       "modern"
     ],
     "globalMetadata": {
+      "_appLogoPath": "images/logo.svg",
       "_appName": "WpfApp",
-      "_appTitle": "WpfApp",
+      "_appTitle": "Tudormobile.WpfApp",
       "_enableSearch": false,
       "pdf": false
     }

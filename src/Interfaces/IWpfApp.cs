@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Tudormobile.Wpf
 {
@@ -16,5 +17,6 @@ namespace Tudormobile.Wpf
     /// </remarks>
     public interface IWpfApp
     {
+        public Task Start<T>() where T: Window;
     }
 }
