@@ -2,9 +2,11 @@
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
+using System.Security.RightsManagement;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -17,17 +19,28 @@ namespace Tudormobile.Wpf;
 public class WpfApp : IWpfApp
 {
     private IHost? _host;
-    private IHostBuilder? _hostBuilder;
+    private IHostBuilder? _builder;
+    private Type? _mainWindowType;
+
+    /// <inheritdoc/>
+    public ObservableCollection<Window> Windows { get; } = new();
+
     /// <summary>
     /// Creates an instance of an IWpfAppBuilder.
     /// </summary>
     /// <returns></returns>
     public static IWpfAppBuilder CreateBuilder() => new WpfAppBuilder();
-    internal WpfApp(bool useHosting)
+
+    /// <summary>
+    /// The current WpfApp Application Host object.
+    /// </summary>
+    public static IWpfApp? Current { get; set; } = null;
+
+    internal WpfApp(IHostBuilder? builder = null, Type? mainWindowType = null)
     {
-        _hostBuilder = useHosting ? Host.CreateDefaultBuilder() : null;
-        // construct...
-        var app = System.Windows.Application.Current;
+        _builder = builder;
+        _mainWindowType = mainWindowType;
+        var app = Application.Current;
         if (app != null)
         {
             app.Startup += App_Startup;
@@ -36,6 +49,9 @@ public class WpfApp : IWpfApp
             app.FragmentNavigation += App_FragmentNavigation;
             app.Exit += App_Exit;
         }
+
+
+        Current = this;
     }
 
     private void App_Exit(object sender, ExitEventArgs e)
@@ -70,8 +86,13 @@ public class WpfApp : IWpfApp
             var t = app.Windows[0].GetType().Assembly.GetType($"{name}ViewModel");
             if (t != null)
             {
-                app.Windows[0].DataContext = Activator.CreateInstance(t!);
+                var model = _host?.Services.GetRequiredService(t) ?? Activator.CreateInstance(t!);
+                app.Windows[0].DataContext = model;
                 app.Activated -= App_Activated;
+            }
+            if (Windows.Count == 0)
+            {
+                Windows.Add(app.Windows[0]);
             }
         }
     }
@@ -81,23 +102,64 @@ public class WpfApp : IWpfApp
         //throw new NotImplementedException();
     }
 
-    public async Task Start<T>() where T: Window
+    /// <inheritdoc/>
+    public async Task Start<T>() where T : Window
     {
-        //if (_host != null)
-       // {
-            if (_hostBuilder != null)
+        if (_builder != null)
+        {
+            _host = _builder.ConfigureServices((context, services) =>
             {
-                _host = _hostBuilder.ConfigureServices((context, services) =>
-                {
-                    services.AddSingleton<T>();
-                }).Build();
-            }
+                services.AddSingleton<T>();
+            }).Build();
+        }
+        if (_host != null)
+        {
             await _host.StartAsync();
             if (Application.Current?.StartupUri == null)
             {
                 var mainWindow = _host.Services.GetRequiredService<T>();
                 mainWindow?.Show();
             }
-        //}
+        }
+    }
+
+    /// <inheritdoc/>
+    public async Task Start()
+    {
+        // TODO: refactor this w/the above
+        if (_builder == null && _mainWindowType != null)
+        {
+            var mainWindow = Activator.CreateInstance(_mainWindowType) as Window;
+            mainWindow?.Show();
+            return;
+        }
+
+        if (_builder != null && _mainWindowType != null)
+        {
+            _host = _builder.ConfigureServices((context, services) =>
+            {
+                services.AddSingleton(_mainWindowType);
+            }).Build();
+            if (_host != null)
+            {
+                await _host.StartAsync();
+                if (Application.Current?.StartupUri == null)
+                {
+                    var mainWindow = _host.Services.GetRequiredService(_mainWindowType) as Window;
+                    mainWindow?.Show();
+                }
+            }
+        }
+    }
+
+    /// <inheritdoc/>
+    public Window CreateWindow<TView, TViewModel>() where TViewModel : class where TView : Window
+    {
+        if (_host == null) throw new InvalidOperationException("No host defined.");
+        var w = _host.Services.GetRequiredService<TView>();
+        var m = _host.Services.GetRequiredService(typeof(TViewModel));
+        w.DataContext = m;
+        Windows.Add(w);
+        return w;
     }
 }

@@ -36,11 +36,14 @@
       "modern"
     ],
     "globalMetadata": {
+      "_appFaviconPath": "images/logo.svg",
       "_appLogoPath": "images/logo.svg",
       "_appName": "WpfApp",
       "_appTitle": "Tudormobile.WpfApp",
+      "_appFooter": "<span>Copyright (C) Tudornobile LLC</span>",
       "_enableSearch": false,
-      "pdf": false
+      "pdf": false,
+      "_disableContribution": true
     }
   }
 }
