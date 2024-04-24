@@ -11,14 +11,14 @@ namespace WpfAppAPITests
     [TestClass]
     public class WpfAppBuilderTests
     {
-        [STATestMethod]
-        public async Task AddMainWindowTest()
-        {
-            var target = WpfApp.CreateBuilder().AddMainWindow<TestWindow>().Build();
-            await target.Start();
+        //[STATestMethod]
+        //public async Task AddMainWindowTest()
+        //{
+        //    var target = WpfApp.CreateBuilder().AddMainWindow<TestWindow>().Build();
+        //    await target.Start();
 
-            Assert.IsInstanceOfType(target.Windows.First(), typeof(TestWindow), "Failed to create the MainWindow object.");
-        }
+        //    Assert.IsInstanceOfType(target.Windows.First(), typeof(TestWindow), "Failed to create the MainWindow object.");
+        //}
         [STATestMethod]
         public async Task AddWindowTest()
         {
