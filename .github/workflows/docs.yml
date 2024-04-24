@@ -1,3 +1,4 @@
+name: Publish Docs
 # Trigger the action on push to main
 on:
   workflow_dispatch:
@@ -35,7 +36,7 @@ jobs:
     - run: docfx docs/docfx.json
 
     - name: Upload artifact
-      uses: actions/upload-pages-artifact@v4
+      uses: actions/upload-pages-artifact@v3
       with:
         # Upload entire repository
         path: 'docs/_site'
