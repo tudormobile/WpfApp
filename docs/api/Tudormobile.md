@@ -1,9 +1,17 @@
-## Tudormobile Namespace
-Copyright(C) Tudormobile LLC  
+## Tudormobile Namespaces
+The namespaces available in the Tudormobile.WpfApp library are described below. In several cases, including the namespace is required to expose extension methods provided.
 
-The WpfApp library provides the following namespaces
+### Tudormobile.WpfApp.dll
+
+```
+using Tudormobile.Wpf;
+```
+
+The ***WpfApp library*** namespaces
 
 - [Tudormobile.Wpf](Tudormobile.Wpf.yml)
     - Root namespace for the WpfApp library.
-- [WpfApp.Tests](WpfApp.Tests.yml)
-    - Unit tests
+- [Tudormobile.Wpf.Services](Tudormobile.Wpf.Services.yml)
+    - Library services.
+- [Tudormobile.Wpf.Commands](Tudormobile.Wpf.Commands.yml)
+    - Built-in library commands.

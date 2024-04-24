@@ -17,4 +17,4 @@ app.Run();
 - This code creates an extensible IWpfAppBuilder and a IWpfApp with preconfigured defaults that closely match the '*System.Windows.Application*' implementation bundled with the WPF framework.
 - Runs the application using the framework application lifecycle defaults.
 
-[NuGET Package README](docs/README.md) | [Source Code README](src/README.md)
+[NuGET Package README](docs/README.md) | [Source Code README](src/README.md) | [API Documentation](https://tudormobile.github.io/WpfApp/)

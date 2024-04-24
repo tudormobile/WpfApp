@@ -19,11 +19,11 @@ namespace Tudormobile.Wpf;
 public class WpfApp : IWpfApp
 {
     private IHost? _host;
-    private IHostBuilder? _builder;
-    private Type? _mainWindowType;
+    private readonly IHostBuilder? _builder;
+    private readonly Type? _mainWindowType;
 
     /// <inheritdoc/>
-    public ObservableCollection<Window> Windows { get; } = new();
+    public ObservableCollection<Window> Windows { get; } = [];
 
     /// <summary>
     /// Creates an instance of an IWpfAppBuilder.
@@ -127,10 +127,20 @@ public class WpfApp : IWpfApp
     public async Task Start()
     {
         // TODO: refactor this w/the above
+        if (_builder != null && _mainWindowType == null)
+        {
+            _host = _builder.Build();
+            await _host.StartAsync();
+        }
+
         if (_builder == null && _mainWindowType != null)
         {
             var mainWindow = Activator.CreateInstance(_mainWindowType) as Window;
-            mainWindow?.Show();
+            if (mainWindow != null)
+            {
+                Windows.Add(mainWindow);
+                mainWindow.Show();
+            }
             return;
         }
 
@@ -146,7 +156,11 @@ public class WpfApp : IWpfApp
                 if (Application.Current?.StartupUri == null)
                 {
                     var mainWindow = _host.Services.GetRequiredService(_mainWindowType) as Window;
-                    mainWindow?.Show();
+                    if (mainWindow != null)
+                    {
+                        Windows.Add(mainWindow);
+                        mainWindow.Show();
+                    }
                 }
             }
         }
@@ -155,11 +169,18 @@ public class WpfApp : IWpfApp
     /// <inheritdoc/>
     public Window CreateWindow<TView, TViewModel>() where TViewModel : class where TView : Window
     {
-        if (_host == null) throw new InvalidOperationException("No host defined.");
-        var w = _host.Services.GetRequiredService<TView>();
-        var m = _host.Services.GetRequiredService(typeof(TViewModel));
-        w.DataContext = m;
-        Windows.Add(w);
-        return w;
+        if (_host != null)
+        {
+            var w = _host.Services.GetRequiredService<TView>();
+            var m = _host.Services.GetRequiredService(typeof(TViewModel));
+            w.DataContext = m;
+            Windows.Add(w);
+            return w;
+        }
+        var model = Activator.CreateInstance<TViewModel>();
+        var result = Activator.CreateInstance<TView>();
+        result.DataContext = model;
+        Windows.Add(result);
+        return result;
     }
 }
