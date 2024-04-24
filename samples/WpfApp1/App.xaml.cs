@@ -12,9 +12,12 @@ namespace WpfApp1
     {
         protected override void OnStartup(StartupEventArgs e)
         {
-            base.OnStartup(e);
+            // Simplest method to startup application
             var app = WpfApp.CreateBuilder().Build();
+            app.Start<MainWindow>();
+            base.OnStartup(e);
         }
+
     }
 
 }

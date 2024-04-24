@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tudormobile.Wpf.Tests
+namespace WpfAppTests
 {
     [TestClass]
     public class WpfAppTests
@@ -16,7 +16,7 @@ namespace Tudormobile.Wpf.Tests
         {
             var target = new WpfApp();
             Assert.IsInstanceOfType<IWpfApp>(target);
-            // what to validate...
+            Assert.IsNotNull(target.Windows, "Windows colletion must be initialized to []");
         }
     }
 }

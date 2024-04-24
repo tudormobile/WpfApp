@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Tudormobile.Wpf;
 
-namespace WpfApp.Tests
+namespace WpfAppTests
 {
     [TestClass]
     public class WpfAppBuilderTests

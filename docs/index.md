@@ -2,10 +2,15 @@
 _layout: landing
 ---
 
-# This is the **HOMEPAGE**.
+# Tudormobile.WpfApp
 
-Refer to [Markdown](http://daringfireball.net/projects/markdown/) for how to write markdown files.
+***Tudormobile.WpfApp*** provides an extensible application container for WPF applications including dependency injection, UI Commands, and application lifecycle management.
 
-## Quick Start Notes:
+- [Introduction](introduction.md)
+- [Getting Started](getting-started.md)
+- [API Documentation](api/Tudormobile.md)
 
-1. Add images to the *images* folder if the file is referencing an image.
+
+[`Source Code`](https://github.com/tudormobile/WpfApp) | [Nuget Package](https://nuget.org)  
+
+<support@tudormobile.com>

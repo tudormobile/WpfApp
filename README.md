@@ -1,7 +1,7 @@
 # WpfApp
 WPF Application container
 
-[![Build and Deploy](https://github.com/tudormobile/WpfApp/actions/workflows/dotnet.yml/badge.svg)](https://github.com/tudormobile/WpfApp/actions/workflows/dotnet.yml)
+[![Build and Deploy](https://github.com/tudormobile/WpfApp/actions/workflows/dotnet.yml/badge.svg)](https://github.com/tudormobile/WpfApp/actions/workflows/dotnet.yml)  [![Publish Docs](https://github.com/tudormobile/WpfApp/actions/workflows/docs.yml/badge.svg)](https://github.com/tudormobile/WpfApp/actions/workflows/docs.yml)
 
 Copyright (C) 2024 Tudormobile LLC
 ### Quick Start
@@ -17,4 +17,4 @@ app.Run();
 - This code creates an extensible IWpfAppBuilder and a IWpfApp with preconfigured defaults that closely match the '*System.Windows.Application*' implementation bundled with the WPF framework.
 - Runs the application using the framework application lifecycle defaults.
 
-[NuGET Package README](docs/README.md) | [Source Code README](src/README.md)
+[NuGET Package README](docs/README.md) | [Source Code README](src/README.md) | [API Documentation](https://tudormobile.github.io/WpfApp/)
