@@ -31,8 +31,9 @@ jobs:
       with:
         name: package
         path: src/bin/release/*.nupkg
-    - name: Create Zip for Release
-      run: compress-archive -Path src\bin\release\*.nupkg -Destination package.zip
+# creating another zip is not needed because 'package.zip' should exist from previous step
+#    - name: Create Zip for Release
+#      run: compress-archive -Path src\bin\release\*.nupkg -Destination package.zip
     - name: Get version
       id: vars
       run: |
