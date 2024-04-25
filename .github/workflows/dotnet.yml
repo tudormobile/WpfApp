@@ -32,12 +32,12 @@ jobs:
         name: package
         path: src/bin/release/*.nupkg
     - name: Create Zip for Release
-      run: powershell -command compress-archive -Path src\bin\release\*.nupkg -Destination package.zip
+      run: compress-archive -Path src\bin\release\*.nupkg -Destination package.zip
     - name: Get version
       id: vars
       run: |
-        set /p ver=<src\bin\release\ver.txt
-        echo version=%ver% >> $GITHUB_OUTPUT
+        $env:ver = Get-Content src\bin\release\ver.txt
+        echo version=$env:ver >> $GITHUB_OUTPUT
     - name: Test output
       run: echo ${{ steps.vars.outputs.version }}      
     - name: Create release
