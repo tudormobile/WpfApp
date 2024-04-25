@@ -38,7 +38,7 @@ jobs:
       id: vars
       run: |
         $env:ver = Get-Content src\bin\release\ver.txt
-        echo version=$env:ver >> $GITHUB_OUTPUT
+        echo version=$env:ver >> $env:GITHUB_OUTPUT
     - name: Test output
       run: echo ${{ steps.vars.outputs.version }}      
     - name: Create release
