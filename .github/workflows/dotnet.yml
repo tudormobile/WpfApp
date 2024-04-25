@@ -29,7 +29,22 @@ jobs:
     - name: Upload Package
       uses: actions/upload-artifact@v4
       with:
-        # Artifact name
         name: package
-        # A file, directory or wildcard pattern that describes what to upload
         path: src/bin/release/*.nupkg
+    - name: Create Zip for Release
+      run: powershell -command compress-archive -Path src\bin\release\*.nupkg -Destination package.zip
+    - name: Get version
+      id: vars
+      run: |
+        set /p ver=<src\bin\release\ver.txt
+        echo version=%ver% >> $GITHUB_OUTPUT
+    - name: Test output
+      run: echo ${{ steps.vars.outputs.version }}      
+    - name: Create release
+      if: ${{ github.event_name == 'push' }}
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        echo "Creating release"
+        echo gh release create --generate-notes v${{ steps.vars.outputs.version }} package.zip
+        gh release create -t ${{ steps.vars.outputs.version }} --generate-notes v${{ steps.vars.outputs.version }} package.zip#package
