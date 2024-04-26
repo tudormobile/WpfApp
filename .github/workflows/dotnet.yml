@@ -32,7 +32,7 @@ jobs:
     - name: Unit Test Annotations
       run: |
         dotnet tool update -g dotnet-Coverage
-        dotnet tool install -g dotnet-reportgenerator-globaltool
+        dotnet tool update -g dotnet-reportgenerator-globaltool
         dotnet-coverage merge **\*.coverage --remove-input-files --output-format xml --output output.xml
         reportgenerator -reports:"output.xml" -targetdir:"output" -reporttypes:"MarkdownSummaryGithub"
         echo "### Test Results" >> "$env:GITHUB_STEP_SUMMARY"
