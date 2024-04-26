@@ -19,7 +19,7 @@ jobs:
       with:
         dotnet-version: 8.0.x
     - name: Unit tests
-      run: dotnet test
+      run: dotnet test --logger trx;LogFilePrefix=output --collect "Code Coverage" 
     - name: Build
       run: dotnet build -c Release
     - name: Documentation
@@ -31,9 +31,8 @@ jobs:
       with:
         name: package
         path: src/bin/release/*.nupkg
-# creating another zip is not needed because 'package.zip' should exist from previous step
-#    - name: Create Zip for Release
-#      run: compress-archive -Path src\bin\release\*.nupkg -Destination package.zip
+    - name: Create Zip for Release
+      run: compress-archive -Path src\bin\release\*.nupkg -Destination package.zip -Force
     - name: Get version
       id: vars
       run: |
@@ -41,6 +40,17 @@ jobs:
         echo version=$env:ver >> $env:GITHUB_OUTPUT
     - name: Test output
       run: echo ${{ steps.vars.outputs.version }}      
+    - name: Unit Test Annotations
+      run: |
+        dotnet tool update -g dotnet-Coverage
+        dotnet tool install -g dotnet-reportgenerator-globaltool
+        dotnet-coverage merge **\*.coverage --remove-input-files --output-format xml --output output.xml
+        reportgenerator -reports:"output.xml" -targetdir:"output" -reporttypes:"MarkdownSummaryGithub"
+        echo Test Results
+        Get-ChildItem -Recurse -Filter *.trx | ForEach-Object {get-content $_.FullName | select-string '<Counters (.+)passedButRunAborted' | ForEach-Object {$_.Matches[0].Groups[1].Value}}
+        echo Code Coverage
+        get-content output\SummaryGithub.md | select-string '<summary>(.+%)</summary>' | ForEach-Object {$_.Matches[0].Groups[1].Value}
+
     - name: Create release
       if: ${{ github.event_name == 'push' }}
       env:
