@@ -26,7 +26,7 @@ public interface IWpfApp
     /// </summary>
     /// <typeparam name="T">Main Window type.</typeparam>
     /// <returns>A Task that will be completed when the Host starts.</returns>
-    public Task Start<T>() where T: Window;
+    public Task Start<T>() where T : Window;
 
     /// <summary>
     /// Starts the application host.
@@ -47,5 +47,10 @@ public interface IWpfApp
     /// <typeparam name="TView">The application window type.</typeparam>
     /// <typeparam name="TViewModel">The type of view model to use as the Data Context for the window.</typeparam>
     /// <returns>A reference to the created window.</returns>
-    public Window CreateWindow<TView, TViewModel>() where TViewModel : class where TView: Window;
+    public Window CreateWindow<TView, TViewModel>() where TViewModel : class where TView : Window;
+
+    /// <summary>
+    /// Represents the command line and its arguments.
+    /// </summary>
+    public ICommandLine CommandLine { get; }
 }

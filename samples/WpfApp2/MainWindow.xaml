@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp2"
+        xmlns:commands="clr-namespace:Tudormobile.Wpf.Commands;assembly=Tudormobile.WpfApp"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
@@ -11,8 +12,8 @@
             <Menu DockPanel.Dock="Top" DataContext="{Binding MenuViewModel}">
                 <MenuItem Header="_File">
                     <MenuItem Header="_New Window" Click="MenuItem_Click"/>
-                    <MenuItem Header="_Close All"/>
-                    <MenuItem Header="E_xit" />
+                    <MenuItem Header="_Close All" Command="commands:WpfApplicationCommands.CloseAll"/>
+                    <MenuItem Header="E_xit" Command="commands:WpfApplicationCommands.Exit"/>
                 </MenuItem>
                 <MenuItem Header="Windows" ItemsSource="{Binding Windows}">
                     <MenuItem.ItemTemplate>
@@ -20,6 +21,12 @@
                             <TextBlock Text="{Binding Title}" />
                         </DataTemplate>
                     </MenuItem.ItemTemplate>
+                    <MenuItem.ItemContainerStyle>
+                        <Style TargetType="MenuItem">
+                            <Setter Property="Command" Value="commands:WpfApplicationCommands.SelectWindow" />
+                            <Setter Property="CommandParameter" Value="{Binding}" />
+                        </Style>
+                    </MenuItem.ItemContainerStyle>
                 </MenuItem>
             </Menu>
             <Grid/>

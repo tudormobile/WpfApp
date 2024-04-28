@@ -27,6 +27,14 @@ namespace WpfAppAPITests
             var actual = WpfApp.Current;
             Assert.IsNotNull(actual, "No current application when running in unit tests.");
         }
+        [TestMethod]
+        public void CommandLineTest()
+        {
+            var target = WpfApp.CreateBuilder().Build();
+            var actual = target.CommandLine;
+            Assert.IsTrue(actual.Arguments.Length > 0, "Should have been some command line arguments.");
+        }
+
 
         [STATestMethod]
         public void CreateWindowWithoutHostTest()

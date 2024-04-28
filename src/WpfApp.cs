@@ -10,6 +10,8 @@ using System.Security.RightsManagement;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
+using Tudormobile.Wpf.Commands;
 
 namespace Tudormobile.Wpf;
 
@@ -21,6 +23,10 @@ public class WpfApp : IWpfApp
     private IHost? _host;
     private readonly IHostBuilder? _builder;
     private readonly Type? _mainWindowType;
+    private Lazy<CommandLine> _commandLine = new(() => new CommandLine());
+
+    /// <inheritdoc/>
+    public ICommandLine CommandLine => _commandLine.Value;
 
     /// <inheritdoc/>
     public ObservableCollection<Window> Windows { get; } = [];
@@ -94,8 +100,51 @@ public class WpfApp : IWpfApp
             {
                 Windows.Add(app.Windows[0]);
             }
+            if (app.MainWindow != null)
+            {
+                app.MainWindow.CommandBindings.Add(new CommandBinding(WpfApplicationCommands.Exit, closeMainWindow));
+                app.MainWindow.CommandBindings.Add(new CommandBinding(WpfApplicationCommands.CloseAll, closeAllWindows, canCloseAllWindows));
+                app.MainWindow.CommandBindings.Add(new CommandBinding(WpfApplicationCommands.SelectWindow, selectWindow));
+
+            }
         }
     }
+    private void selectWindow(object? sender, ExecutedRoutedEventArgs e)
+    {
+        var w = e.Parameter as Window;
+        w?.Activate();
+    }
+
+
+    private void closeMainWindow(object? sender, EventArgs e)
+    {
+        if (sender == Application.Current.MainWindow)
+        {
+            Application.Current.Shutdown();
+            //Application.Current.MainWindow.Close();//?
+        }
+    }
+
+    private void closeAllWindows(object? sender, EventArgs e)
+    {
+        if (sender == Application.Current.MainWindow)
+        {
+            foreach (var w in this.Windows.Where(w => w != Application.Current.MainWindow))
+            {
+                w.Close();
+            }
+        }
+    }
+
+    private void canCloseAllWindows(object? sender, CanExecuteRoutedEventArgs e)
+    {
+        if (sender == Application.Current.MainWindow)
+        {
+            e.CanExecute = this.Windows.Count(w => w != Application.Current.MainWindow) > 0;
+        }
+    }
+
+
 
     private void App_Startup(object sender, StartupEventArgs e)
     {
@@ -120,6 +169,16 @@ public class WpfApp : IWpfApp
                 var mainWindow = _host.Services.GetRequiredService<T>();
                 mainWindow?.Show();
             }
+        }
+        if (_builder == null && _host == null && Application.Current != null && Application.Current.StartupUri == null)
+        {
+            var mainWindow = Activator.CreateInstance<T>() as Window;
+            if (mainWindow != null)
+            {
+                Windows.Add(mainWindow);
+                mainWindow.Show();
+            }
+            return;
         }
     }
 
@@ -183,4 +242,5 @@ public class WpfApp : IWpfApp
         Windows.Add(result);
         return result;
     }
+
 }
