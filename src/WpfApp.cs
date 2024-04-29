@@ -89,7 +89,8 @@ public class WpfApp : IWpfApp
         if (app.Windows.Count == 1 && app.Windows[0].DataContext == null)
         {
             var name = app.Windows[0].GetType().FullName;
-            var t = app.Windows[0].GetType().Assembly.GetType($"{name}ViewModel");
+            var ass = app.Windows[0].GetType().Assembly;
+            var t = ass.GetType($"{name}ViewModel") ?? ass.GetType($"{name}Model");
             if (t != null)
             {
                 var model = _host?.Services.GetRequiredService(t) ?? Activator.CreateInstance(t!);
