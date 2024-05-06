@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -106,10 +107,17 @@ public class WpfApp : IWpfApp
                 app.MainWindow.CommandBindings.Add(new CommandBinding(WpfApplicationCommands.Exit, closeMainWindow));
                 app.MainWindow.CommandBindings.Add(new CommandBinding(WpfApplicationCommands.CloseAll, closeAllWindows, canCloseAllWindows));
                 app.MainWindow.CommandBindings.Add(new CommandBinding(WpfApplicationCommands.SelectWindow, selectWindow));
-
+                app.MainWindow.CommandBindings.Add(new CommandBinding(WpfApplicationCommands.Open, openFile));
             }
         }
     }
+
+    private void openFile(object? sender, ExecutedRoutedEventArgs e)
+    {
+        var cmd = new FilePickerCommand();
+        cmd.Execute(e.Parameter);
+    }
+
     private void selectWindow(object? sender, ExecutedRoutedEventArgs e)
     {
         var w = e.Parameter as Window;
