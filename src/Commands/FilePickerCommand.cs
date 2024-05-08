@@ -5,19 +5,39 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Tudormobile.Wpf.Services;
 
 namespace Tudormobile.Wpf.Commands
 {
+    /// <summary>
+    /// Provides a UI to choose a file in the file system to save.
+    /// </summary>
     public class SaveFilePickerCommand : FilePickerCommand
     {
-        public SaveFilePickerCommand() : base(true) { }
+        /// <summary>
+        /// Creates and initializes a new instance.
+        /// </summary>
+        public SaveFilePickerCommand(IDialogService? dialogService = null) : base(true, dialogService) { }
     }
-    public class OpenFilePickerCommand : FilePickerCommand { }
+
+    /// <summary>
+    /// Provides a UI to choose a file in the file system to open.
+    /// </summary>
+    public class OpenFilePickerCommand : FilePickerCommand 
+    {
+        /// <summary>
+        /// Creates and initializes a new instance.
+        /// </summary>
+        public OpenFilePickerCommand(IDialogService? dialogService = null) : base(false, dialogService) { }
+    }
+
     /// <summary>
     /// Provides a UI to choose a file in the file system.
     /// </summary>
-    public class FilePickerCommand(bool isSaveCommand = false) : ProxyCommand
+    public class FilePickerCommand(bool isSaveCommand = false, IDialogService? dialogService = null) : ProxyCommand
     {
+        private readonly IDialogService _dialogService = dialogService ?? new DialogService();
+        /// <inheritdoc/>
         protected override void OnExecute(object? parameter)
         {
             switch (parameter)
@@ -36,17 +56,11 @@ namespace Tudormobile.Wpf.Commands
 
         private void onExecute(string? title, string? filter, string? filename, ICommand? command)
         {
-
-            FileDialog fd = isSaveCommand ? new SaveFileDialog() : new OpenFileDialog();
-            fd.Title = title;
-            fd.Filter = filter;
-            fd.FileName = filename;
-            fd.Filter = filter;
-            if (fd.ShowDialog() == true)
+            var (result, fd) = _dialogService.ShowFileDialog(title, filter, filename, isSaveDialog: isSaveCommand);
+            if (result == true)
             {
                 command?.Execute(fd.FileName);
             }
-
         }
     }
 }

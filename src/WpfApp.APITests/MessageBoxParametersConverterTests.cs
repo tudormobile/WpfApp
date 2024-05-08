@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,7 +25,7 @@ namespace WpfAppAPITests
         public void CanConvertToTest()
         {
             var target = new MessageBoxParametersConverter();
-            Assert.IsTrue(target.CanConvertTo(typeof(MessageBoxParameters)), "Must be able to convert to MessageBoxParmaters.");
+            Assert.IsTrue(target.CanConvertTo(typeof(MessageBoxParameters)), "Must be able to convert to MessageBoxParameters.");
         }
 
         [TestMethod]
@@ -59,6 +60,48 @@ namespace WpfAppAPITests
             var actual = (String)target.ConvertTo(testData, expected.GetType())!;
 
             Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void ConvertToEmptyTest()
+        {
+            var target = new MessageBoxParametersConverter();
+            var testData = new MessageBoxParameters()
+            {
+                Text = null,
+                Caption = null,
+                Button = MessageBoxButton.OK,
+                Icon = MessageBoxImage.None,
+                Result = MessageBoxResult.None,
+            };
+            var expected = "||OK|None|None";
+
+            var actual = (String)target.ConvertTo(testData, expected.GetType())!;
+
+            Assert.AreEqual(expected, actual);
+        }
+
+
+        [TestMethod]
+        public void ConvertFromEmptyTest()
+        {
+            var target = new MessageBoxParametersConverter();
+            var testData = "";
+            var actual = (MessageBoxParameters)target.ConvertFrom(testData)!;
+
+            Assert.AreEqual(string.Empty, actual.Text);
+            Assert.IsNull(actual.Caption);
+            Assert.AreEqual(MessageBoxImage.None, actual.Icon);
+            Assert.AreEqual(MessageBoxButton.OK, actual.Button);
+            Assert.AreEqual(MessageBoxResult.None, actual.Result);
+
+        }
+
+        [TestMethod, ExcludeFromCodeCoverage, ExpectedException(typeof(NotSupportedException))]
+        public void ConvertToInvalidType()
+        {
+            var target = new MessageBoxParametersConverter();
+            var actual = target.ConvertTo(null, typeof(object));
         }
     }
 }

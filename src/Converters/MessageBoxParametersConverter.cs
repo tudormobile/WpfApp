@@ -8,7 +8,7 @@ using Tudormobile.Wpf.Commands;
 namespace Tudormobile.Wpf.Converters
 {
     /// <summary>
-    /// Converts a string in XAML to MessageBoxparameters.
+    /// Converts a string in XAML to MessageBoxParameters.
     /// </summary>
     public class MessageBoxParametersConverter : TypeConverter
     {
@@ -23,14 +23,14 @@ namespace Tudormobile.Wpf.Converters
         /// <inheritdoc/>
         public override object? ConvertFrom(ITypeDescriptorContext? context, CultureInfo? culture, object value)
         {
-            var parts = value?.ToString().Split('|');
+            var parts = ((string)value).Split('|');
             var result = new MessageBoxParameters()
             {
-                Text = parts.Length > 0 ? parts[0] : string.Empty,
+                Text = parts[0],
                 Caption = parts.Length > 1 ? parts[1] : null,
-                Button = parts.Length > 2 ? Enum.Parse<MessageBoxButton>(parts[2]) : null,
-                Icon = parts.Length > 1 ? Enum.Parse<MessageBoxImage>(parts[3]) : null,
-                Result = parts.Length > 4 ? Enum.Parse<MessageBoxResult>(parts[4]) : null,
+                Button = parts.Length > 2 ? Enum.Parse<MessageBoxButton>(parts[2]) : (MessageBoxButton)0,
+                Icon = parts.Length > 3 ? Enum.Parse<MessageBoxImage>(parts[3]) : (MessageBoxImage)0,
+                Result = parts.Length > 4 ? Enum.Parse<MessageBoxResult>(parts[4]) : (MessageBoxResult)0,
             };
             return result;
         }
@@ -41,14 +41,14 @@ namespace Tudormobile.Wpf.Converters
             {
                 return string.Join("|", new string[]
                 {
-                    p.Text,
+                    p.Text ?? String.Empty,
                     p.Caption ?? String.Empty,
-                    p.Button?.ToString()?? String.Empty,
-                    p.Icon?.ToString()?? String.Empty,
-                    p.Result?.ToString()?? String.Empty,
+                    p.Button.ToString(),
+                    p.Icon.ToString(),
+                    p.Result.ToString(),
                 });
             }
-            return base.ConvertTo(context, culture, value, destinationType);
+            throw new NotSupportedException($"Cannot convert to type '{destinationType.Name}'");
         }
     }
 }

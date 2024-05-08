@@ -6,16 +6,30 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using Tudormobile.Wpf.Converters;
+using Tudormobile.Wpf.Services;
 
 namespace Tudormobile.Wpf.Commands
 {
+    /// <summary>
+    /// Provides a UI to display a message box to the user.
+    /// </summary>
     public class MessageBoxCommand : ProxyCommand
     {
         private readonly Action<MessageBoxResult> _resultAction;
-        public MessageBoxCommand(Action<MessageBoxResult>? resultAction = null)
+        private readonly IDialogService _dialogService;
+
+        /// <summary>
+        /// Creates and initializes a new instance.
+        /// </summary>
+        /// <param name="resultAction">Action to take after message box is dismissed.</param>
+        /// <param name="dialogService">Alternative dialog service to use.</param>
+        public MessageBoxCommand(Action<MessageBoxResult>? resultAction = null, IDialogService? dialogService = null)
         {
             _resultAction = resultAction ?? (r => { });
+            _dialogService = dialogService ?? new DialogService();  // TODO: Refactor this
         }
+
+        /// <inheritdoc/>
         protected override void OnExecute(object? parameter)
         {
             if (parameter is MessageBoxParameters p)
@@ -28,7 +42,7 @@ namespace Tudormobile.Wpf.Commands
             }
             else if (parameter is String s)
             {
-                showMessageBox((MessageBoxParameters) new MessageBoxParametersConverter().ConvertFrom(s)!);
+                showMessageBox((MessageBoxParameters)new MessageBoxParametersConverter().ConvertFrom(s)!);
             }
             else
             {
@@ -37,22 +51,14 @@ namespace Tudormobile.Wpf.Commands
         }
         private void showMessageBox(MessageBoxParameters p)
         {
-            MessageBoxResult result = MessageBoxResult.None;
-            if (p.Button == null)
+            var result = MessageBoxResult.None;
+            if (p.Icon == MessageBoxImage.None)
             {
-                result = MessageBox.Show(p.Text, p.Caption ?? String.Empty);
-            }
-            else if (p.Icon == null)
-            {
-                result = MessageBox.Show(p.Text, p.Caption, (MessageBoxButton)p.Button);
-            }
-            else if (p.Result == null)
-            {
-                result = MessageBox.Show(p.Text, p.Caption, (MessageBoxButton)p.Button, (MessageBoxImage)p.Icon);
+                result = _dialogService.ShowMessageBox(p.Text, p.Caption ?? String.Empty, p.Button);
             }
             else
             {
-                result = MessageBox.Show(p.Text, p.Caption, (MessageBoxButton)p.Button, (MessageBoxImage)p.Icon, (MessageBoxResult)p.Result);
+                result = _dialogService.ShowMessageBox(p.Text, p.Caption, p.Button, p.Icon, p.Result);
             }
             //MessageBox.Show(p.Text);
             //MessageBox.Show(p.Text, p.Caption);
@@ -62,7 +68,7 @@ namespace Tudormobile.Wpf.Commands
 
             if (p.Command == null)
             {
-                _resultAction?.Invoke(result);
+                _resultAction.Invoke(result);
             }
             else
             {

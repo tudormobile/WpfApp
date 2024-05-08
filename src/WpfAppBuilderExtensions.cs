@@ -11,8 +11,20 @@ using System.Windows.Threading;
 
 namespace Tudormobile.Wpf
 {
+    /// <summary>
+    /// WpfApp builder extensions.
+    /// </summary>
     public static class WpfAppBuilderExtensions
     {
+        /// <summary>
+        /// Add 'Views' from an assembly.
+        /// </summary>
+        /// <param name="builder">WpfAppBuilder to extend.</param>
+        /// <param name="ass">Assembly to scan for 'Views'.</param>
+        /// <returns>Fluent-reference to the builder.</returns>
+        /// <remarks>
+        /// 'Views' are identified by convention as concrete classes whose name ends in 'View'.
+        /// </remarks>
         public static IWpfAppBuilder AddViews(this IWpfAppBuilder builder, Assembly ass)
         {
             foreach (var t in ass.GetTypes().Where(t => t.IsClass && !t.IsAbstract && t.Name.EndsWith("View")))
@@ -25,6 +37,17 @@ namespace Tudormobile.Wpf
             }
             return builder;
         }
+
+        /// <summary>
+        /// Add 'Models' from an assembly.
+        /// </summary>
+        /// <param name="builder">WpfAppBuilder to extend.</param>
+        /// <param name="ass">Assembly to scan for 'Views'.</param>
+        /// <returns>Fluent-reference to the builder.</returns>
+        /// <remarks>
+        /// 'Models' are identified by convention as concrete classes whose name ends in 'Model' or any
+        /// concrete class that implements INotifyPropertyChanged.
+        /// </remarks>
         public static IWpfAppBuilder AddModels(this IWpfAppBuilder builder, Assembly ass)
         {
             foreach (var t in ass.GetTypes().Where(
@@ -41,6 +64,13 @@ namespace Tudormobile.Wpf
             }
             return builder;
         }
+
+        /// <summary>
+        /// Add a 'Dispatcher' to the application model.
+        /// </summary>
+        /// <param name="builder">WpfAppBuilder to extend.</param>
+        /// <param name="d">Dispatcher to add.</param>
+        /// <returns>Fluent-reference to the builder.</returns>
         public static IWpfAppBuilder AddDispatcher(this IWpfAppBuilder builder, Dispatcher d)
         {
             builder.HostBuilder.ConfigureServices((context, services) =>
