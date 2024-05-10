@@ -39,14 +39,14 @@ namespace Tudormobile.Wpf.Converters
         {
             if (value is MessageBoxParameters p)
             {
-                return string.Join("|", new string[]
-                {
+                return string.Join("|",
+                [
                     p.Text ?? String.Empty,
                     p.Caption ?? String.Empty,
                     p.Button.ToString(),
                     p.Icon.ToString(),
                     p.Result.ToString(),
-                });
+                ]);
             }
             throw new NotSupportedException($"Cannot convert to type '{destinationType.Name}'");
         }

@@ -11,6 +11,9 @@ namespace WpfAppAPITests
         public MessageBoxResult Result { get; set; }
         public bool? FileDialogResult { get; set; }
         public string? FileDialogFileName { get; set; }
+        public string Name { get; } = nameof(TestDialogService);
+        public bool IsSingleton { get; } = false;
+
         public MessageBoxResult ShowMessageBox(
                     string? text,
                     string? caption = "",

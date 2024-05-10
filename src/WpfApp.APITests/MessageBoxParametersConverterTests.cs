@@ -34,7 +34,7 @@ namespace WpfAppAPITests
             var target = new MessageBoxParametersConverter();
             var testData = "Message|Caption|YesNoCancel|Stop|Yes";
 
-            var actual = (MessageBoxParameters) target.ConvertFrom(testData)!;
+            var actual = (MessageBoxParameters)target.ConvertFrom(testData)!;
 
             Assert.AreEqual("Message", actual.Text);
             Assert.AreEqual("Caption", actual.Caption);
@@ -101,7 +101,7 @@ namespace WpfAppAPITests
         public void ConvertToInvalidType()
         {
             var target = new MessageBoxParametersConverter();
-            var actual = target.ConvertTo(null, typeof(object));
+            _ = target.ConvertTo(null, typeof(object));
         }
     }
 }

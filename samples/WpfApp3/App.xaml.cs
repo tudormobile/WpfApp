@@ -10,6 +10,10 @@ namespace WpfApp3
     /// </summary>
     public partial class App : WpfApplication
     {
+        protected override void OnMainWindowCreated()
+        {
+            Help.Register(MainWindow, "https://www.google.com");
+        }
     }
 
 }

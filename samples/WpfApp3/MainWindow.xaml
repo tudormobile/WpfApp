@@ -10,6 +10,7 @@
         <StackPanel Orientation="Vertical" HorizontalAlignment="Center" TextElement.FontSize="24">
             <TextBlock Text="{Binding Message, FallbackValue='[ message goes here ]'}"/>
             <TextBlock Text="{Binding Clock.Time, FallbackValue='[ time goes here ]'}" HorizontalAlignment="Center" FontWeight="Bold"/>
+            <TextBlock Text="( press 'F1' for Help" FontSize="12" Margin="10" TextAlignment="Center"/>
         </StackPanel>
     </Grid>
 </Window>

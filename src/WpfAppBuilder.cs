@@ -4,13 +4,16 @@ using System;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using Tudormobile.Wpf.Interfaces;
 
 namespace Tudormobile.Wpf;
 
 /// <inheritdoc/>
 internal class WpfAppBuilder : IWpfAppBuilder
 {
-    private Lazy<IHostBuilder> _hostBuilder;
+    private readonly List<(Type, Type)> _services = [];
+    private readonly List<(Type, Type)> _singleServices = [];
+    private readonly Lazy<IHostBuilder> _hostBuilder;
     private Type? _mainWindow;
     private bool _useHosting;
     internal WpfAppBuilder()
@@ -47,6 +50,18 @@ internal class WpfAppBuilder : IWpfAppBuilder
                 services.AddSingleton(_mainWindow);
             });
         }
+        _hostBuilder.Value.ConfigureServices((context, services) =>
+            {
+                foreach (var service in _singleServices)
+                {
+                    services.AddSingleton(service.Item1, service.Item2);
+                }
+                foreach (var service in _singleServices)
+                {
+                    services.AddTransient(service.Item1, service.Item2);
+                }
+            });
+
         return _hostBuilder.IsValueCreated ? new WpfApp(_hostBuilder.Value, _mainWindow) : new WpfApp(null, _mainWindow);
     }
 
@@ -71,6 +86,22 @@ internal class WpfAppBuilder : IWpfAppBuilder
         {
             services.AddTransient<TView>().AddTransient<TViewModel>();
         });
+        return this;
+    }
+
+    /// <inheritdoc/>
+    public IWpfAppBuilder AddService<TServiceInterface, TServiceClass>(bool isSingleton = false)
+        where TServiceInterface : IWpfAppService
+        where TServiceClass : class
+    {
+        if (isSingleton)
+        {
+            _singleServices.Add((typeof(TServiceInterface), typeof(TServiceClass)));
+        }
+        else
+        {
+            _services.Add((typeof(TServiceInterface), typeof(TServiceClass)));
+        }
         return this;
     }
 }

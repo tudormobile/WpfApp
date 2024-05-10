@@ -85,18 +85,21 @@ public class WpfApp : IWpfApp
 
     private void App_Activated(object? sender, EventArgs e)
     {
-        //throw new NotImplementedException();
         var app = Application.Current;
-        if (app.Windows.Count == 1 && app.Windows[0].DataContext == null)
+        if (app.Windows.Count == 1)
         {
-            var name = app.Windows[0].GetType().FullName;
-            var ass = app.Windows[0].GetType().Assembly;
-            var t = ass.GetType($"{name}ViewModel") ?? ass.GetType($"{name}Model");
-            if (t != null)
+            app.Activated -= App_Activated;
+            if (app.Windows[0].DataContext == null)
             {
-                var model = _host?.Services.GetRequiredService(t) ?? Activator.CreateInstance(t!);
-                app.Windows[0].DataContext = model;
-                app.Activated -= App_Activated;
+                // Try and set the data context
+                var name = app.Windows[0].GetType().FullName;
+                var ass = app.Windows[0].GetType().Assembly;
+                var t = ass.GetType($"{name}ViewModel") ?? ass.GetType($"{name}Model");
+                if (t != null)
+                {
+                    var model = _host?.Services.GetRequiredService(t) ?? Activator.CreateInstance(t!);
+                    app.Windows[0].DataContext = model;
+                }
             }
             if (Windows.Count == 0)
             {

@@ -13,10 +13,10 @@ namespace Tudormobile.Wpf.Commands;
 /// </summary>
 public static class WpfApplicationCommands
 {
-    private static Lazy<RoutedUICommand> _exitCommand = new(() => new RoutedUICommand(nameof(Exit), nameof(Exit), typeof(WpfApplicationCommands)));
-    private static Lazy<RoutedUICommand> _closeAllCommand = new(() => new RoutedUICommand(nameof(CloseAll), nameof(CloseAll), typeof(WpfApplicationCommands)));
-    private static Lazy<RoutedUICommand> _selectWindowCommand = new(() => new RoutedUICommand(nameof(SelectWindow), nameof(SelectWindow), typeof(WpfApplicationCommands)));
-    private static Lazy<RoutedUICommand> _openCommand = new(() => new RoutedUICommand(nameof(Open), nameof(Open), typeof(WpfApplicationCommands)));
+    private static readonly Lazy<RoutedUICommand> _exitCommand = new(() => new RoutedUICommand(nameof(Exit), nameof(Exit), typeof(WpfApplicationCommands)));
+    private static readonly Lazy<RoutedUICommand> _closeAllCommand = new(() => new RoutedUICommand(nameof(CloseAll), nameof(CloseAll), typeof(WpfApplicationCommands)));
+    private static readonly Lazy<RoutedUICommand> _selectWindowCommand = new(() => new RoutedUICommand(nameof(SelectWindow), nameof(SelectWindow), typeof(WpfApplicationCommands)));
+    private static readonly Lazy<RoutedUICommand> _openCommand = new(() => new RoutedUICommand(nameof(Open), nameof(Open), typeof(WpfApplicationCommands)));
  
     /// <summary>
     /// Exit the Application.

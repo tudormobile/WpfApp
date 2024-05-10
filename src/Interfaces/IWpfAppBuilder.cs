@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using Tudormobile.Wpf.Interfaces;
 
 namespace Tudormobile.Wpf;
 
@@ -48,4 +49,13 @@ public interface IWpfAppBuilder : IBuilder<IWpfApp>
     /// <typeparam name="TViewModel">Type of the View Model object.</typeparam>
     /// <returns>Fluent reference to the builder.</returns>
     public IWpfAppBuilder AddView<TView, TViewModel>() where TView : FrameworkElement where TViewModel : class;
+
+    /// <summary>
+    /// Adds a service to the container.
+    /// </summary>
+    /// <typeparam name="TServiceInterface">Service interface.</typeparam>
+    /// <typeparam name="TServiceClass">Service implementation.</typeparam>
+    /// <param name="isSingleton">True if service is a singleton.</param>
+    /// <returns>Fluent reference to the builder.</returns>
+    public IWpfAppBuilder AddService<TServiceInterface, TServiceClass>(bool isSingleton = true) where TServiceInterface : IWpfAppService where TServiceClass : class;
 }

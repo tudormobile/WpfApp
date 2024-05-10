@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Threading;
+using Tudormobile.Wpf.Services;
 
 namespace Tudormobile.Wpf
 {
@@ -81,5 +82,73 @@ namespace Tudormobile.Wpf
             return builder;
         }
 
+        /// <summary>
+        /// Utilize basic services.
+        /// </summary>
+        /// <param name="builder">WpfAppBuilder to extend.</param>
+        /// <returns>Fluent-reference to the builder.</returns>
+        public static IWpfAppBuilder UseBasicServices(this IWpfAppBuilder builder)
+        {
+            builder.UseDialogService();
+            builder.UseWindowService();
+            return builder;
+        }
+
+        /// <summary>
+        /// Utilize all available services.
+        /// </summary>
+        /// <param name="builder">WpfAppBuilder to extend.</param>
+        /// <returns>Fluent-reference to the builder.</returns>
+        public static IWpfAppBuilder UseServices(this IWpfAppBuilder builder)
+        {
+            UseBasicServices(builder);
+            builder.UsePrintService();
+            builder.UseHelpService();
+            return builder;
+        }
+
+        /// <summary>
+        /// Utilize the 'Print' service.
+        /// </summary>
+        /// <param name="builder">WpfAppBuilder to extend.</param>
+        /// <returns>Fluent-reference to the builder.</returns>
+        public static IWpfAppBuilder UsePrintService(this IWpfAppBuilder builder)
+        {
+            builder.AddService<IPrintService, PrintService>();
+            return builder;
+        }
+
+        /// <summary>
+        /// Utilize the 'Window' service.
+        /// </summary>
+        /// <param name="builder">WpfAppBuilder to extend.</param>
+        /// <returns>Fluent-reference to the builder.</returns>
+        public static IWpfAppBuilder UseWindowService(this IWpfAppBuilder builder)
+        {
+            builder.AddService<IWindowService, WindowService>();
+            return builder;
+        }
+
+        /// <summary>
+        /// Utilize the 'Help' service.
+        /// </summary>
+        /// <param name="builder">WpfAppBuilder to extend.</param>
+        /// <returns>Fluent-reference to the builder.</returns>
+        public static IWpfAppBuilder UseHelpService(this IWpfAppBuilder builder)
+        {
+            builder.AddService<IHelpService, HelpService>();
+            return builder;
+        }
+
+        /// <summary>
+        /// Utilize the 'Dialog' service.
+        /// </summary>
+        /// <param name="builder">WpfAppBuilder to extend.</param>
+        /// <returns>Fluent-reference to the builder.</returns>
+        public static IWpfAppBuilder UseDialogService(this IWpfAppBuilder builder)
+        {
+            builder.AddService<IDialogService, DialogService>();
+            return builder;
+        }
     }
 }

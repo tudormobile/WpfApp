@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using Tudormobile.Wpf.Services;
 
 namespace Tudormobile.Wpf
 {
@@ -13,7 +14,8 @@ namespace Tudormobile.Wpf
     /// </summary>
     public class WpfApplication : Application
     {
-        private Lazy<IWpfAppBuilder> _builder = new(() => WpfApp.CreateBuilder());
+        private readonly Lazy<IWpfAppBuilder> _builder = new(() => WpfApp.CreateBuilder());
+        private readonly Lazy<IHelpService> _help = new(() => new HelpService());
 
         /// <summary>
         /// True if application should auto-configure itself.
@@ -39,9 +41,20 @@ namespace Tudormobile.Wpf
         /// </remarks>
         public IWpfApp? App { get; private set; }
 
+        /// <summary>
+        /// Help service reference.
+        /// </summary>
+        public IHelpService Help => _help.Value;
+
         /// <inheritdoc/>
         protected override async void OnStartup(StartupEventArgs e)
         {
+            var app = Application.Current;
+            if (app != null)
+            {
+                app.Activated += app_Activated;
+            }
+
             if (AutoConfigure)
             {
                 var a = this.GetType().Assembly;
@@ -54,6 +67,21 @@ namespace Tudormobile.Wpf
                 return;
             }
             base.OnStartup(e);
+        }
+
+        /// <summary>
+        /// The main window was created.
+        /// </summary>
+        protected virtual void OnMainWindowCreated() { }
+
+        private void app_Activated(object? sender, EventArgs e)
+        {
+            var app = Application.Current;
+            if (app.Windows.Count > 0 && app.MainWindow != null)
+            {
+                OnMainWindowCreated();
+                app.Activated -= app_Activated;
+            }
         }
     }
 }

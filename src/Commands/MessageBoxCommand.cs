@@ -51,7 +51,7 @@ namespace Tudormobile.Wpf.Commands
         }
         private void showMessageBox(MessageBoxParameters p)
         {
-            var result = MessageBoxResult.None;
+            MessageBoxResult result;
             if (p.Icon == MessageBoxImage.None)
             {
                 result = _dialogService.ShowMessageBox(p.Text, p.Caption ?? String.Empty, p.Button);
