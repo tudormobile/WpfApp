@@ -53,4 +53,9 @@ public interface IWpfApp
     /// Represents the command line and its arguments.
     /// </summary>
     public ICommandLine CommandLine { get; }
+
+    /// <summary>
+    /// Returns an instance of a dialog service.
+    /// </summary>
+    public IDialogService DialogService { get; }
 }

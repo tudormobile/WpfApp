@@ -19,7 +19,7 @@
         <DockPanel>
             <Menu x:Name="menu" DockPanel.Dock="Top" DataContext="{Binding MenuViewModel}">
                 <MenuItem Header="_File">
-                    <MenuItem Header="_New Window" Click="MenuItem_Click"/>
+                    <MenuItem Header="_New Window" Click="menuItem_Click"/>
                     <MenuItem Header="_Open" Command="commands:WpfApplicationCommands.Open" CommandParameter="{Binding OpenCommand}"/>
                     <MenuItem Header="_Save As" Command="{Binding SaveAsPicker}" CommandParameter="{Binding SaveAsParameters}"/>
                     <MenuItem Header="_Close All" Command="commands:WpfApplicationCommands.CloseAll"/>

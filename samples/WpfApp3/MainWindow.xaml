@@ -11,6 +11,8 @@
             <TextBlock Text="{Binding Message, FallbackValue='[ message goes here ]'}"/>
             <TextBlock Text="{Binding Clock.Time, FallbackValue='[ time goes here ]'}" HorizontalAlignment="Center" FontWeight="Bold"/>
             <TextBlock Text="( press 'F1' for Help" FontSize="12" Margin="10" TextAlignment="Center"/>
+            <Button Content="Press for 'SomeCommand'" Command="{Binding SomeCommand}" Margin="10"/>
+            <Button Content="Press for 'AnotherCommand'" Command="{Binding AnotherCommand}" Margin="10"/>
         </StackPanel>
     </Grid>
 </Window>

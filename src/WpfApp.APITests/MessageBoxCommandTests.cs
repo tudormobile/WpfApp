@@ -11,7 +11,7 @@ using Tudormobile.Wpf.Commands;
 namespace WpfAppAPITests
 {
     [TestClass]
-    public class MessageBoxCommandTest
+    public class MessageBoxCommandTests
     {
         [TestMethod]
         public void ConstructorTest()

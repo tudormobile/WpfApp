@@ -22,7 +22,7 @@ namespace WpfApp2
             InitializeComponent();
         }
 
-        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        private void menuItem_Click(object sender, RoutedEventArgs e)
         {
             WpfApp.Current?.CreateWindow<TestWindow, TestWindowViewModel>().Show();
         }

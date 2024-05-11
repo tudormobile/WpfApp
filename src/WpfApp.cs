@@ -1,30 +1,28 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Win32;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Net;
-using System.Security.RightsManagement;
-using System.Text;
-using System.Threading.Tasks;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Input;
 using Tudormobile.Wpf.Commands;
+using Tudormobile.Wpf.Services;
 
 namespace Tudormobile.Wpf;
 
 /// <summary>
 /// Wpf Application Container.
 /// </summary>
-public class WpfApp : IWpfApp
+public partial class WpfApp : IWpfApp
 {
     private IHost? _host;
     private readonly IHostBuilder? _builder;
     private readonly Type? _mainWindowType;
-    private Lazy<CommandLine> _commandLine = new(() => new CommandLine());
+    private readonly Lazy<CommandLine> _commandLine = new(() => new CommandLine());
+    private readonly Lazy<IDialogService> _dialogService = new(() => new DialogService());
+    private readonly Lazy<DelegateCommandLocator> _commandLocator = new(() => new DelegateCommandLocator());
+
+    /// <inheritdoc/>
+    public IDialogService DialogService => _dialogService.Value;
 
     /// <inheritdoc/>
     public ICommandLine CommandLine => _commandLine.Value;
@@ -43,6 +41,11 @@ public class WpfApp : IWpfApp
     /// </summary>
     public static IWpfApp? Current { get; set; } = null;
 
+    /// <summary>
+    /// The command locator for registering and resolving ICommand delegates.
+    /// </summary>
+    internal DelegateCommandLocator CommandLocator => _commandLocator.Value;
+
     internal WpfApp(IHostBuilder? builder = null, Type? mainWindowType = null)
     {
         _builder = builder;
@@ -50,18 +53,17 @@ public class WpfApp : IWpfApp
         var app = Application.Current;
         if (app != null)
         {
-            app.Startup += App_Startup;
-            app.Activated += App_Activated;
-            app.LoadCompleted += App_LoadCompleted;
-            app.FragmentNavigation += App_FragmentNavigation;
-            app.Exit += App_Exit;
+            app.Startup += app_Startup;
+            app.Activated += app_Activated;
+            app.LoadCompleted += app_LoadCompleted;
+            app.FragmentNavigation += app_FragmentNavigation;
+            app.Exit += app_Exit;
         }
-
 
         Current = this;
     }
 
-    private void App_Exit(object sender, ExitEventArgs e)
+    private void app_Exit(object sender, ExitEventArgs e)
     {
         var t = Task.Run(async () =>
         {
@@ -73,22 +75,22 @@ public class WpfApp : IWpfApp
         t.Wait();
     }
 
-    private void App_FragmentNavigation(object sender, System.Windows.Navigation.FragmentNavigationEventArgs e)
+    private void app_FragmentNavigation(object sender, System.Windows.Navigation.FragmentNavigationEventArgs e)
     {
         //throw new NotImplementedException();
     }
 
-    private void App_LoadCompleted(object sender, System.Windows.Navigation.NavigationEventArgs e)
+    private void app_LoadCompleted(object sender, System.Windows.Navigation.NavigationEventArgs e)
     {
         //throw new NotImplementedException();
     }
 
-    private void App_Activated(object? sender, EventArgs e)
+    private void app_Activated(object? sender, EventArgs e)
     {
         var app = Application.Current;
         if (app.Windows.Count == 1)
         {
-            app.Activated -= App_Activated;
+            app.Activated -= app_Activated;
             if (app.Windows[0].DataContext == null)
             {
                 // Try and set the data context
@@ -97,7 +99,8 @@ public class WpfApp : IWpfApp
                 var t = ass.GetType($"{name}ViewModel") ?? ass.GetType($"{name}Model");
                 if (t != null)
                 {
-                    var model = _host?.Services.GetRequiredService(t) ?? Activator.CreateInstance(t!);
+                    var model = _host?.Services.GetRequiredService(t) ?? Activator.CreateInstance(t!)!;
+                    _commandLocator.Value.ResolveHandlers(model);
                     app.Windows[0].DataContext = model;
                 }
             }
@@ -152,13 +155,11 @@ public class WpfApp : IWpfApp
     {
         if (sender == Application.Current.MainWindow)
         {
-            e.CanExecute = this.Windows.Count(w => w != Application.Current.MainWindow) > 0;
+            e.CanExecute = Windows.Any(w => w != Application.Current.MainWindow);
         }
     }
 
-
-
-    private void App_Startup(object sender, StartupEventArgs e)
+    private void app_Startup(object sender, StartupEventArgs e)
     {
         //throw new NotImplementedException();
     }
@@ -184,8 +185,7 @@ public class WpfApp : IWpfApp
         }
         if (_builder == null && _host == null && Application.Current != null && Application.Current.StartupUri == null)
         {
-            var mainWindow = Activator.CreateInstance<T>() as Window;
-            if (mainWindow != null)
+            if (Activator.CreateInstance<T>() is Window mainWindow)
             {
                 Windows.Add(mainWindow);
                 mainWindow.Show();
@@ -206,8 +206,7 @@ public class WpfApp : IWpfApp
 
         if (_builder == null && _mainWindowType != null)
         {
-            var mainWindow = Activator.CreateInstance(_mainWindowType) as Window;
-            if (mainWindow != null)
+            if (Activator.CreateInstance(_mainWindowType) is Window mainWindow)
             {
                 Windows.Add(mainWindow);
                 mainWindow.Show();
@@ -226,8 +225,7 @@ public class WpfApp : IWpfApp
                 await _host.StartAsync();
                 if (Application.Current?.StartupUri == null)
                 {
-                    var mainWindow = _host.Services.GetRequiredService(_mainWindowType) as Window;
-                    if (mainWindow != null)
+                    if (_host.Services.GetRequiredService(_mainWindowType) is Window mainWindow)
                     {
                         Windows.Add(mainWindow);
                         mainWindow.Show();
@@ -244,6 +242,7 @@ public class WpfApp : IWpfApp
         {
             var w = _host.Services.GetRequiredService<TView>();
             var m = _host.Services.GetRequiredService(typeof(TViewModel));
+            _commandLocator.Value.ResolveHandlers(m);
             w.DataContext = m;
             Windows.Add(w);
             return w;

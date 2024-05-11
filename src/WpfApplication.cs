@@ -2,9 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using Tudormobile.Wpf.Commands;
 using Tudormobile.Wpf.Services;
 
 namespace Tudormobile.Wpf
@@ -64,9 +66,36 @@ namespace Tudormobile.Wpf
                              .Build();
                 base.OnStartup(e);
                 await App.Start();
+                // experimental
+                addHandlers(this);
                 return;
             }
             base.OnStartup(e);
+        }
+
+        private void addHandlers(Object o)
+        {
+            // experimental
+            var t = o.GetType();
+            var ms = t.GetMethods().Where(m => m.CustomAttributes.Any()).ToArray();
+
+            foreach (var m in ms)
+            {
+                // Execute handlers
+                var ea = m.GetCustomAttribute<ExecuteAttribute>();
+                if (ea != null)
+                {
+                    // register
+                    ((WpfApp?)App)?.CommandLocator.RegisterHandler(ea.ClassName ?? String.Empty, ea.CommandName, o, m);
+                }
+                // CanExecute handlers
+                var cea = m.GetCustomAttribute<CanExecuteAttribute>();
+                if (cea != null)
+                {
+                    // register
+                    ((WpfApp?)App)?.CommandLocator.RegisterHandler(cea.ClassName ?? String.Empty, cea.CommandName, o, m, isCanExecute: true);
+                }
+            }
         }
 
         /// <summary>
