@@ -15,3 +15,8 @@ The ***WpfApp library*** namespaces
     - Library services.
 - [Tudormobile.Wpf.Commands](Tudormobile.Wpf.Commands.yml)
     - Built-in library commands.
+
+    
+# Release [!include[version](../../src/bin/release/ver.txt)]
+Latest unit testing results are shown below.
+[!include[summary](../../output/SummaryGithub.md)]

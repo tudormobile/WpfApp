@@ -4,15 +4,41 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp2"
+        xmlns:commands="clr-namespace:Tudormobile.Wpf.Commands;assembly=Tudormobile.WpfApp"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
+        <Grid.Resources>
+            <commands:MessageBoxParameters x:Key="param" 
+                                           Text="This is the message text"
+                                           Caption="{Binding Caption}"
+                                           Button="OK" 
+                                           Icon="Information" 
+                                           Result="OK"/>
+        </Grid.Resources>
         <DockPanel>
-            <Menu DockPanel.Dock="Top" DataContext="{Binding MenuViewModel}">
+            <Menu x:Name="menu" DockPanel.Dock="Top" DataContext="{Binding MenuViewModel}">
                 <MenuItem Header="_File">
-                    <MenuItem Header="_New Window" Click="MenuItem_Click"/>
-                    <MenuItem Header="_Close All"/>
-                    <MenuItem Header="E_xit" />
+                    <MenuItem Header="_New Window" Click="menuItem_Click"/>
+                    <MenuItem Header="_Open" Command="commands:WpfApplicationCommands.Open" CommandParameter="{Binding OpenCommand}"/>
+                    <MenuItem Header="_Save As" Command="{Binding SaveAsPicker}" CommandParameter="{Binding SaveAsParameters}"/>
+                    <MenuItem Header="_Close All" Command="commands:WpfApplicationCommands.CloseAll"/>
+                    <MenuItem Header="E_xit" Command="commands:WpfApplicationCommands.Exit"/>
+                </MenuItem>
+                <MenuItem Header="Message Boxes">
+                    <MenuItem Header="Say Hello" Command="{Binding SayHelloCommand}" CommandParameter="{Binding MessageBoxParameters}">
+                        <!--<MenuItem.CommandParameter>
+                            <commands:MessageBoxParameters 
+                                Text="{Binding PlacementTarget.DataContext.Test, RelativeSource={RelativeSource FindAncestor,AncestorType=Menu,AncestorLevel=10}}" 
+                                Caption="This is the caption" 
+                                Icon="Error" 
+                                Button="YesNoCancel" 
+                                Result="Cancel"/>
+                        </MenuItem.CommandParameter>-->
+                    </MenuItem>
+                    <!--Text|Caption|Button|Icon|Result-->
+                    <MenuItem Header="Say Hello Too" Command="{Binding SayHelloCommand}" CommandParameter="This message is the text in the view|This is caption|YesNoCancel|Warning|No"/>
+                    <MenuItem Header="Say Hello Three" Command="{Binding SayHelloCommand}" CommandParameter="{StaticResource param}"/>
                 </MenuItem>
                 <MenuItem Header="Windows" ItemsSource="{Binding Windows}">
                     <MenuItem.ItemTemplate>
@@ -20,6 +46,12 @@
                             <TextBlock Text="{Binding Title}" />
                         </DataTemplate>
                     </MenuItem.ItemTemplate>
+                    <MenuItem.ItemContainerStyle>
+                        <Style TargetType="MenuItem">
+                            <Setter Property="Command" Value="commands:WpfApplicationCommands.SelectWindow" />
+                            <Setter Property="CommandParameter" Value="{Binding}" />
+                        </Style>
+                    </MenuItem.ItemContainerStyle>
                 </MenuItem>
             </Menu>
             <Grid/>

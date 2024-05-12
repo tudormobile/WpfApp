@@ -14,18 +14,18 @@ namespace WpfAppAPITests
         {
             if (Thread.CurrentThread.GetApartmentState() == ApartmentState.STA)
             {
-                return Invoke(testMethod);
+                return invoke(testMethod);
             }
 
             TestResult[] result = [];
-            var thread = new Thread(() => result = Invoke(testMethod));
+            var thread = new Thread(() => result = invoke(testMethod));
             thread.SetApartmentState(ApartmentState.STA);
             thread.Start();
             thread.Join();
             return result;
         }
 
-        private static TestResult[] Invoke(ITestMethod testMethod)
+        private static TestResult[] invoke(ITestMethod testMethod)
         {
             return [testMethod.Invoke(null)];
         }

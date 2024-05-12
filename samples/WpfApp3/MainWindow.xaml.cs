@@ -8,9 +8,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Tudormobile.Wpf;
 
-namespace WpfApp2
+namespace WpfApp3
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -21,11 +20,5 @@ namespace WpfApp2
         {
             InitializeComponent();
         }
-
-        private void menuItem_Click(object sender, RoutedEventArgs e)
-        {
-            WpfApp.Current?.CreateWindow<TestWindow, TestWindowViewModel>().Show();
-        }
-
     }
 }
