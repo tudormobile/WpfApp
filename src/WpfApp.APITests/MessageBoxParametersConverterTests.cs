@@ -97,6 +97,41 @@ namespace WpfAppAPITests
 
         }
 
+        [TestMethod]
+        public void ConvertTest()
+        {
+            var target = new MessageBoxParametersConverter();
+            var testData = "Message|Caption|YesNoCancel|Stop|Yes";
+
+            var actual = (MessageBoxParameters)target.Convert(testData, typeof(MessageBoxParameters), null, null)!;
+
+            Assert.AreEqual("Message", actual.Text);
+            Assert.AreEqual("Caption", actual.Caption);
+            Assert.AreEqual(MessageBoxButton.YesNoCancel, actual.Button);
+            Assert.AreEqual(MessageBoxImage.Stop, actual.Icon);
+            Assert.AreEqual(MessageBoxResult.Yes, actual.Result);
+
+        }
+
+        [TestMethod]
+        public void ConvertBackTest()
+        {
+            var target = new MessageBoxParametersConverter();
+            var testData = new MessageBoxParameters()
+            {
+                Text = "Message",
+                Caption = "Caption",
+                Button = MessageBoxButton.YesNoCancel,
+                Icon = MessageBoxImage.Hand,
+                Result = MessageBoxResult.Yes,
+            };
+            var expected = "Message|Caption|YesNoCancel|Hand|Yes";
+
+            var actual = (String)target.ConvertBack(testData, expected.GetType(), null, null)!;
+
+            Assert.AreEqual(expected, actual);
+        }
+
         [TestMethod, ExcludeFromCodeCoverage, ExpectedException(typeof(NotSupportedException))]
         public void ConvertToInvalidType()
         {

@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using Tudormobile.Wpf.Interfaces;
 
 namespace Tudormobile.Wpf;
 

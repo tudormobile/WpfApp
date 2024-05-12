@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
-using Tudormobile.Wpf.Interfaces;
 
-namespace Tudormobile.Wpf;
+namespace Tudormobile.Wpf.Services;
 
 /// <summary>
 /// Print and Print Preview service.

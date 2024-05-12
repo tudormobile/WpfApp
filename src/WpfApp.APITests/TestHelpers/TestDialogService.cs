@@ -2,6 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Windows;
 using Tudormobile.Wpf;
+using Tudormobile.Wpf.Services;
 
 namespace WpfAppAPITests
 {

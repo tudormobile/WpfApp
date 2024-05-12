@@ -1,7 +1,7 @@
 # Introduction
 **Tudormobile.WpfApp** provides an extensible application container for WPF applications providing dependency injection and application lifecycle management.
 
-Use the '***Tudormobile.WpfApp***' as a replacement for the *'System.Windows.Application'* object provided by the WPF framework. 
+Use the '***Tudormobile.WpfApp***' as a supplment to the the *'System.Windows.Application'* object provided by the WPF framework, or use the '***Tudormobile.WpfApplication***' object, which is derived from *System.Windows.Application*, as a direct replacement with added functionality. 
 
 ```
 using Tudormobile.Wpf;
@@ -13,7 +13,8 @@ var w = app.CreateWindow<MyWindow>();
 w.Show();
 
 // Modal dialog
-var result = app.ShowDialog<MyDialog, MyDialogViewModel>();
+var result = app.CreateWindow<MyDialog, MyDialogViewModel>();
+result.ShowDialog();
 ```
 The ***DataContext*** is located, created, and set via naming convention or configuration. Depenency injection can be used to compose complex view models. 
 

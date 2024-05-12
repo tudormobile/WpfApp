@@ -9,7 +9,7 @@ using System.Windows;
 
 namespace Tudormobile.Wpf
 {
-    /// <inheritdoc/>
+    /// <inheritdoc cref="ICommandLine" />
     public class CommandLine : ICommandLine
     {
         /// <inheritdoc/>
