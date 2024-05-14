@@ -28,7 +28,7 @@ namespace Tudormobile.Wpf
         /// </remarks>
         public static IWpfAppBuilder AddViews(this IWpfAppBuilder builder, Assembly ass)
         {
-            foreach (var t in ass.GetTypes().Where(t => t.IsClass && !t.IsAbstract && t.Name.EndsWith("View")))
+            foreach (var t in ass.GetTypes().Where(t => t.IsClass && !t.IsAbstract && nameCouldBeView(t.Name)))
             {
                 builder.HostBuilder.ConfigureServices((context, services) =>
                 {
@@ -38,6 +38,8 @@ namespace Tudormobile.Wpf
             }
             return builder;
         }
+        private static bool nameCouldBeView(string name)
+            => name.EndsWith("View") || name.EndsWith("Control") || name.EndsWith("Window");
 
         /// <summary>
         /// Add 'Models' from an assembly.

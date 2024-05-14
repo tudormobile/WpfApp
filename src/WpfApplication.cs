@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Threading;
 using Tudormobile.Wpf.Commands;
 using Tudormobile.Wpf.Services;
 
@@ -108,7 +109,11 @@ namespace Tudormobile.Wpf
             var app = Application.Current;
             if (app.Windows.Count > 0 && app.MainWindow != null)
             {
-                OnMainWindowCreated();
+                // hack for now
+                ThreadPool.QueueUserWorkItem(d =>
+                {
+                    ((Dispatcher)d).Invoke(OnMainWindowCreated, System.Windows.Threading.DispatcherPriority.ApplicationIdle);
+                }, Dispatcher);
                 app.Activated -= app_Activated;
             }
         }

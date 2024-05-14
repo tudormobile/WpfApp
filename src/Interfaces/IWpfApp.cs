@@ -59,4 +59,33 @@ public interface IWpfApp
     /// Returns an instance of a dialog service.
     /// </summary>
     public IDialogService DialogService { get; }
+
+    /// <summary>
+    /// Creates a view, view model, and sets the data context of the view to the view model.
+    /// </summary>
+    /// <typeparam name="TView">Type of view.</typeparam>
+    /// <typeparam name="TViewModel">Type of view model.</typeparam>
+    /// <returns>A framework element of type TView.</returns>
+    public FrameworkElement CreateView<TView, TViewModel>() where TViewModel : class where TView : FrameworkElement;
+
+    /// <summary>
+    /// Creates a view, view model, and sets the data context of the view to the view model.
+    /// </summary>
+    /// <typeparam name="TView">Type of view.</typeparam>
+    /// <returns>A framework element of type TView.</returns>
+    /// <remarks>
+    /// The view model type is inferred by convention or registration.
+    /// </remarks>
+    public FrameworkElement CreateView<TView>() where TView : FrameworkElement;
+
+    /// <summary>
+    /// Creates a view, view model, and sets the data context of the view to the view model.
+    /// </summary>
+    /// <param name="viewType">Type of view.</param>
+    /// <param name="viewModelType">Type of view model.</param>
+    /// <returns>A framework element of type TView.</returns>
+    /// <remarks>
+    /// The view model type is inferred by convention or registration.
+    /// </remarks>
+    public FrameworkElement CreateView(Type viewType, Type? viewModelType = null);
 }

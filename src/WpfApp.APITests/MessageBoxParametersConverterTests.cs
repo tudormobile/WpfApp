@@ -103,7 +103,9 @@ namespace WpfAppAPITests
             var target = new MessageBoxParametersConverter();
             var testData = "Message|Caption|YesNoCancel|Stop|Yes";
 
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
             var actual = (MessageBoxParameters)target.Convert(testData, typeof(MessageBoxParameters), null, null)!;
+#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
 
             Assert.AreEqual("Message", actual.Text);
             Assert.AreEqual("Caption", actual.Caption);
@@ -127,7 +129,9 @@ namespace WpfAppAPITests
             };
             var expected = "Message|Caption|YesNoCancel|Hand|Yes";
 
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
             var actual = (String)target.ConvertBack(testData, expected.GetType(), null, null)!;
+#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
 
             Assert.AreEqual(expected, actual);
         }
