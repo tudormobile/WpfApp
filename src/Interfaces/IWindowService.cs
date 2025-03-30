@@ -5,9 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using Tudormobile.Wpf.Interfaces;
 
-namespace Tudormobile.Wpf;
+namespace Tudormobile.Wpf.Services;
 
 /// <summary>
 /// Window management service.

@@ -54,3 +54,39 @@ builder.HostBuilder.ConfigureServices((context, services) =>
 var app = builder.Build();
 app.Start();
 ```
+
+#### Deriving from WpfApplication
+You can derive from *WpfApplication*, which is a subclass of *System.Windows.Application*, and have the application container auto-configured, which works well for most implementations.
+
+In App.xaml:
+```
+<wpf:WpfApplication x:Class="WpfApp3.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:wpf="clr-namespace:Tudormobile.Wpf;assembly=Tudormobile.WpfApp"
+             xmlns:local="clr-namespace:WpfApp3"
+             AutoConfigure="true"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+         ...
+    </Application.Resources>
+</wpf:WpfApplication>
+```
+The key lines, here, being:
+```
+<wpf:WpfApplication ...
+  xmlns:wpf="clr-namespace:Tudormobile.Wpf;assembly=Tudormobile.WpfApp"
+  AutoConfigure="true"
+ ...
+ ```
+ In App.xaml.cs code:
+ ```
+    public partial class App : WpfApplication
+    {
+        protected override void OnMainWindowCreated()
+        {
+            // ... add code here, for example:
+            Help.Register(MainWindow, "https://www.google.com");
+        }
+   }
+```

@@ -4,7 +4,6 @@ using System;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using Tudormobile.Wpf.Interfaces;
 
 namespace Tudormobile.Wpf;
 

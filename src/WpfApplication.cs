@@ -1,11 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Reflection;
 using System.Windows;
+using System.Windows.Threading;
 using Tudormobile.Wpf.Commands;
 using Tudormobile.Wpf.Services;
 
@@ -108,7 +103,11 @@ namespace Tudormobile.Wpf
             var app = Application.Current;
             if (app.Windows.Count > 0 && app.MainWindow != null)
             {
-                OnMainWindowCreated();
+                // hack for now
+                _ = ThreadPool.QueueUserWorkItem(d =>
+                {
+                    ((Dispatcher)d!).Invoke(OnMainWindowCreated, System.Windows.Threading.DispatcherPriority.ApplicationIdle);
+                }, Dispatcher);
                 app.Activated -= app_Activated;
             }
         }

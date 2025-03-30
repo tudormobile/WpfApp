@@ -99,7 +99,7 @@ public partial class WpfApp : IWpfApp
                 var t = ass.GetType($"{name}ViewModel") ?? ass.GetType($"{name}Model");
                 if (t != null)
                 {
-                    var model = _host?.Services.GetRequiredService(t) ?? Activator.CreateInstance(t!)!;
+                    var model = _host?.Services.GetService(t) ?? Activator.CreateInstance(t!)!;
                     _commandLocator.Value.ResolveHandlers(model);
                     app.Windows[0].DataContext = model;
                 }
@@ -180,7 +180,19 @@ public partial class WpfApp : IWpfApp
             if (Application.Current?.StartupUri == null)
             {
                 var mainWindow = _host.Services.GetRequiredService<T>();
-                mainWindow?.Show();
+                var dispatcher = mainWindow?.Dispatcher;
+
+                if (mainWindow != null)
+                {
+                    if (dispatcher != null && dispatcher.CheckAccess())
+                    {
+                        dispatcher.Invoke(() => mainWindow.Show());
+                    }
+                    else
+                    {
+                        mainWindow.Show();
+                    }
+                }
             }
         }
         if (_builder == null && _host == null && Application.Current != null && Application.Current.StartupUri == null)
@@ -254,4 +266,119 @@ public partial class WpfApp : IWpfApp
         return result;
     }
 
+    /// <summary>
+    /// <inheritdoc/>
+    /// </summary>
+    public FrameworkElement CreateView<TView, TViewModel>()
+        where TView : FrameworkElement
+        where TViewModel : class
+    {
+        if (_host != null)
+        {
+            var v = _host.Services.GetRequiredService<TView>();
+            var m = _host.Services.GetRequiredService(typeof(TViewModel));
+            return resolveDataContext(v, m);
+        }
+        var model = Activator.CreateInstance<TViewModel>();
+        var view = Activator.CreateInstance<TView>();
+        return resolveDataContext(view, model);
+    }
+
+    /// <summary>
+    /// <inheritdoc/>
+    /// </summary>
+    public FrameworkElement CreateView<TView>() where TView : FrameworkElement
+    {
+        if (_host != null)
+        {
+            var v = _host.Services.GetRequiredService<TView>();
+            return resolveDataContext(v, null);
+        }
+        var view = Activator.CreateInstance<TView>();
+        return resolveDataContext(view, null);
+    }
+
+    /// <summary>
+    /// <inheritdoc/>
+    /// </summary>
+    public FrameworkElement CreateView(Type viewType, Type? viewModelType = null)
+    {
+        if (_host != null)
+        {
+            var v = (_host.Services.GetRequiredService(viewType) as FrameworkElement)!;
+            if (viewModelType != null)
+            {
+                var m = _host.Services.GetRequiredService(viewModelType);
+                return resolveDataContext(v, m);
+            }
+            return resolveDataContext(v, null);
+        }
+        var view = (Activator.CreateInstance(viewType) as FrameworkElement)!;
+        if (viewModelType != null)
+        {
+            var model = Activator.CreateInstance(viewModelType)!;
+            return resolveDataContext(view, model);
+        }
+        return resolveDataContext(view, null);
+    }
+
+    private FrameworkElement resolveDataContext(FrameworkElement element, object? context)
+    {
+        if (context == null)
+        {
+            // try to 'find' data context
+            var name = element.GetType().Name;
+            var ass = element.GetType().Assembly;
+
+            // TODO: Obviously needs refactoring
+            if (_host != null)
+            {
+                foreach (var modelTypeName in possibleModelNames(name))
+                {
+                    var t = findType(ass, modelTypeName);
+                    if (t != null)
+                    {
+                        context = _host.Services.GetService(t);
+                        break;
+                    }
+                }
+            }
+            else { /* later*/}
+
+        }
+        if (context != null)
+        {
+            _commandLocator.Value.ResolveHandlers(context);
+            element.DataContext = context;
+        }
+        return element;
+    }
+
+    // TODO: Obvious refactoring
+    private Type? findType(Assembly ass, string modelTypeName)
+    {
+        return ass.GetTypes().Where(t => t.Name == modelTypeName).FirstOrDefault();
+    }
+
+    // TODO: Obvious refactoring
+    private IEnumerable<string> possibleModelNames(string viewName)
+    {
+        // candidates: [name]Model, [name]ViewModel, [abbrName]Model, [abbrName]ViewModel
+        yield return viewName + "Model";
+        yield return viewName + "ViewModel";
+
+        // strip off 'Control', 'Window'
+        if (viewName.EndsWith("Control"))
+        {
+            var shortName = viewName.Substring(0, viewName.Length - 7);
+            yield return shortName + "Model";
+            yield return shortName + "ViewModel";
+        }
+        if (viewName.EndsWith("Window"))
+        {
+            var shortName = viewName.Substring(0, viewName.Length - 6);
+            yield return shortName + "Model";
+            yield return shortName + "ViewModel";
+        }
+    }
 }

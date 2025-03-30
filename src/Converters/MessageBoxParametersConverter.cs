@@ -3,14 +3,15 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Security.AccessControl;
 using System.Windows;
+using System.Windows.Data;
 using Tudormobile.Wpf.Commands;
 
 namespace Tudormobile.Wpf.Converters
 {
     /// <summary>
-    /// Converts a string in XAML to MessageBoxParameters.
+    /// A 'Type Converter' and 'Value Converter' that converts a string in XAML to MessageBoxParameters.
     /// </summary>
-    public class MessageBoxParametersConverter : TypeConverter
+    public class MessageBoxParametersConverter : TypeConverter, IValueConverter
     {
         /// <inheritdoc/>
         public override bool CanConvertFrom(ITypeDescriptorContext? context, Type sourceType)
@@ -50,5 +51,28 @@ namespace Tudormobile.Wpf.Converters
             }
             throw new NotSupportedException($"Cannot convert to type '{destinationType.Name}'");
         }
+
+        /// <summary>
+        /// Convert from a string value to MessageBoxParameters.
+        /// </summary>
+        /// <param name="value">Value to convert.</param>
+        /// <param name="targetType">Target type (must be MessageBoxParameters)</param>
+        /// <param name="parameter">Conversion parameter (ignored).</param>
+        /// <param name="culture">Conversion culture (ignored).</param>
+        /// <returns>MessageBoxParameters configured by the string.</returns>
+        public object? Convert(object value, Type targetType, object parameter, CultureInfo culture)
+            => ConvertFrom(value);
+
+        /// <summary>
+        /// Convert from MessageBoxParameters back to a String.
+        /// </summary>
+        /// <param name="value">Value to convert (Must be MessageBoxParameters).</param>
+        /// <param name="targetType">Target type (must be string).</param>
+        /// <param name="parameter">Conversion parameter (ignored).</param>
+        /// <param name="culture">Conversion culture (ignored).</param>
+        /// <returns>String representation of the MessageBoxParameters.</returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public object? ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+            => ConvertTo(value, targetType);
     }
 }
