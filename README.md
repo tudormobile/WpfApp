@@ -3,7 +3,7 @@ WPF Application container
 
 [![Build and Deploy](https://github.com/tudormobile/WpfApp/actions/workflows/dotnet.yml/badge.svg)](https://github.com/tudormobile/WpfApp/actions/workflows/dotnet.yml)  [![Publish Docs](https://github.com/tudormobile/WpfApp/actions/workflows/docs.yml/badge.svg)](https://github.com/tudormobile/WpfApp/actions/workflows/docs.yml)  
 
-Copyright (C) 2024 Tudormobile LLC
+Copyright (C) 2024-2025 Tudormobile LLC
 ### Quick Start
 
 ```
