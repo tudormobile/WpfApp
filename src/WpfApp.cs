@@ -99,7 +99,7 @@ public partial class WpfApp : IWpfApp
                 var t = ass.GetType($"{name}ViewModel") ?? ass.GetType($"{name}Model");
                 if (t != null)
                 {
-                    var model = _host?.Services.GetRequiredService(t) ?? Activator.CreateInstance(t!)!;
+                    var model = _host?.Services.GetService(t) ?? Activator.CreateInstance(t!)!;
                     _commandLocator.Value.ResolveHandlers(model);
                     app.Windows[0].DataContext = model;
                 }
@@ -180,7 +180,19 @@ public partial class WpfApp : IWpfApp
             if (Application.Current?.StartupUri == null)
             {
                 var mainWindow = _host.Services.GetRequiredService<T>();
-                mainWindow?.Show();
+                var dispatcher = mainWindow?.Dispatcher;
+
+                if (mainWindow != null)
+                {
+                    if (dispatcher != null && dispatcher.CheckAccess())
+                    {
+                        dispatcher.Invoke(() => mainWindow.Show());
+                    }
+                    else
+                    {
+                        mainWindow.Show();
+                    }
+                }
             }
         }
         if (_builder == null && _host == null && Application.Current != null && Application.Current.StartupUri == null)
@@ -324,7 +336,7 @@ public partial class WpfApp : IWpfApp
                 foreach (var modelTypeName in possibleModelNames(name))
                 {
                     var t = findType(ass, modelTypeName);
-                    if ( t != null)
+                    if (t != null)
                     {
                         context = _host.Services.GetService(t);
                         break;
@@ -345,7 +357,7 @@ public partial class WpfApp : IWpfApp
     // TODO: Obvious refactoring
     private Type? findType(Assembly ass, string modelTypeName)
     {
-        return ass.GetTypes().Where(t=>t.Name == modelTypeName).FirstOrDefault();
+        return ass.GetTypes().Where(t => t.Name == modelTypeName).FirstOrDefault();
     }
 
     // TODO: Obvious refactoring
