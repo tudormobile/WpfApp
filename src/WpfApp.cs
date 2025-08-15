@@ -355,13 +355,13 @@ public partial class WpfApp : IWpfApp
     }
 
     // TODO: Obvious refactoring
-    private Type? findType(Assembly ass, string modelTypeName)
+    private static Type? findType(Assembly ass, string modelTypeName)
     {
         return ass.GetTypes().Where(t => t.Name == modelTypeName).FirstOrDefault();
     }
 
     // TODO: Obvious refactoring
-    private IEnumerable<string> possibleModelNames(string viewName)
+    private static IEnumerable<string> possibleModelNames(string viewName)
     {
         // candidates: [name]Model, [name]ViewModel, [abbrName]Model, [abbrName]ViewModel
         yield return viewName + "Model";
@@ -370,13 +370,13 @@ public partial class WpfApp : IWpfApp
         // strip off 'Control', 'Window'
         if (viewName.EndsWith("Control"))
         {
-            var shortName = viewName.Substring(0, viewName.Length - 7);
+            var shortName = viewName[..^7];
             yield return shortName + "Model";
             yield return shortName + "ViewModel";
         }
         if (viewName.EndsWith("Window"))
         {
-            var shortName = viewName.Substring(0, viewName.Length - 6);
+            var shortName = viewName[..^6];
             yield return shortName + "Model";
             yield return shortName + "ViewModel";
         }

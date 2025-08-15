@@ -1,8 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using System.Configuration;
-using System.Data;
 using System.Windows;
 using Tudormobile.Wpf;
+using Application = System.Windows.Application;
 
 namespace WpfApp2
 {

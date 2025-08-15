@@ -1,9 +1,8 @@
-﻿using System.Configuration;
-using System.Data;
+﻿using Microsoft.Extensions.DependencyInjection;
 using System.Diagnostics;
-using System.Windows;
 using Tudormobile.Wpf;
 using Tudormobile.Wpf.Commands;
+using Tudormobile.Wpf.Services;
 
 namespace WpfApp3
 {
@@ -12,20 +11,27 @@ namespace WpfApp3
     /// </summary>
     public partial class App : WpfApplication
     {
+        protected override void OnConfigureServices(IServiceCollection services)
+        {
+            services.UseHelp().UseDialog();
+        }
         protected override void OnMainWindowCreated()
         {
-            Help.Register(MainWindow, "https://www.google.com");
+            var helpService = Services.GetRequiredService<IHelpService>();
+            helpService.Register(MainWindow, "https://www.google.com");
         }
 
         [Execute(nameof(MainWindowModel), nameof(MainWindowModel.SomeCommand))]
         public void SomeMethod(/*string filename*/)
         {
-            App?.DialogService.ShowMessageBox("SomeMethod() was invoked.");
+            var dialogService = Services.GetRequiredService<IDialogService>();
+            dialogService.ShowMessageBox("SomeMethod() was invoked.");
         }
         [Execute(nameof(MainWindowModel.AnotherCommand))]
         public void AnotherMethod(string filename)
         {
-            App?.DialogService.ShowMessageBox("AnotherMethod(string filename) was invoked.");
+            var dialogService = Services.GetRequiredService<IDialogService>();
+            dialogService.ShowMessageBox("AnotherMethod(string filename) was invoked.");
         }
         [CanExecute(nameof(MainWindowModel.AnotherCommand))]
         public bool SomeMethod(string filename)

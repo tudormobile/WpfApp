@@ -1,7 +1,4 @@
-﻿using System.Configuration;
-using System.Data;
-using System.Windows;
-using Tudormobile.Wpf;
+﻿using Tudormobile.Wpf;
 using Tudormobile.Wpf.Commands;
 using WpfApp4.Views;
 
@@ -12,6 +9,7 @@ namespace WpfApp4
     /// </summary>
     public partial class App : WpfApplication
     {
+
         protected override void OnMainWindowCreated()
         {
             if (MainWindow.DataContext is MainWindowModel model)
@@ -23,10 +21,11 @@ namespace WpfApp4
         [Execute(nameof(MainWindowModel.SelectControlCommand))]
         public void SelectUIItem(Type t)
         {
-            if (MainWindow.DataContext is MainWindowModel model)
-            {
-                model.SelectedUI = App!.CreateView(t);
-            }
+            // TODO: Re0work this example with Commands and View creation, or remove it.
+            //if (MainWindow.DataContext is MainWindowModel model)
+            //{
+            //    model.SelectedUI = App!.CreateView(t);
+            //}
         }
     }
 
