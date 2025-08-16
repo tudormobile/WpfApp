@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System.Diagnostics;
+using System.Windows.Threading;
 using Tudormobile.Wpf;
 using Tudormobile.Wpf.Commands;
 using Tudormobile.Wpf.Services;
@@ -13,12 +14,18 @@ namespace WpfApp3
     {
         protected override void OnConfigureServices(IServiceCollection services)
         {
-            services.UseHelp().UseDialog();
+            services.UseHelpService().UseDialogService();
+            services.AddTransient<MainWindowModel>()
+                .AddTransient<ClockData>()
+                .AddSingleton(typeof(Dispatcher), this.Dispatcher);
         }
         protected override void OnMainWindowCreated()
         {
             var helpService = Services.GetRequiredService<IHelpService>();
             helpService.Register(MainWindow, "https://www.google.com");
+
+            // could alternatively call "base.OnMainWindowCreated();" to do the same thing as below
+            MainWindow.DataContext = App.Current.Services.GetService<MainWindowModel>();
         }
 
         [Execute(nameof(MainWindowModel), nameof(MainWindowModel.SomeCommand))]

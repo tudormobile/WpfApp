@@ -12,6 +12,7 @@ namespace WpfApp4
 
         protected override void OnMainWindowCreated()
         {
+            base.OnMainWindowCreated(); // Allow auto-creation of DataContext via base class.
             if (MainWindow.DataContext is MainWindowModel model)
             {
                 model.Controls.Add(typeof(HelloWorldControl));
@@ -21,7 +22,7 @@ namespace WpfApp4
         [Execute(nameof(MainWindowModel.SelectControlCommand))]
         public void SelectUIItem(Type t)
         {
-            // TODO: Re0work this example with Commands and View creation, or remove it.
+            // TODO: Re-work this example with Commands and View creation, or remove it.
             //if (MainWindow.DataContext is MainWindowModel model)
             //{
             //    model.SelectedUI = App!.CreateView(t);

@@ -34,7 +34,7 @@ public partial class App : Tudormobile.Wpf.WpfApplication
         // several extensions exist to utilize built-in services
         services.UseDialogService()
                     // ...
-                .UseMessageBoxService();
+                .UsePrintService();
     }
 }
 ```
@@ -48,7 +48,10 @@ var app = builder.Build();
 
 app.Run();
 ```
-- This code creates an extensible IWpfAppBuilder and a IWpfApp with preconfigured defaults that closely match the '*System.Windows.Application*' implementation bundled with the WPF framework.
+- Creates an extensible IWpfAppBuilder and a IWpfApp with preconfigured defaults that closely match the '*System.Windows.Application*' implementation bundled with the WPF framework.
 - Runs the application using the framework application lifecycle defaults.
+
+> [!TIP]
+> Checkout each example project for additional information.
 
 [NuGET Package README](docs/README.md) | [Source Code README](src/README.md) | [API Documentation](https://tudormobile.github.io/WpfApp/)

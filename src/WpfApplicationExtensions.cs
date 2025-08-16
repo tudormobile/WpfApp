@@ -20,7 +20,7 @@ public static class WpfApplicationExtensions
     /// </remarks>
     /// <param name="services">The <see cref="IServiceCollection"/> to which the service will be added.</param>
     /// <returns>The updated <see cref="IServiceCollection"/> instance.</returns>
-    public static IServiceCollection UseHelp(this IServiceCollection services)
+    public static IServiceCollection UseHelpService(this IServiceCollection services)
         => services.AddSingleton<IHelpService, HelpService>();
 
     /// <summary>
@@ -31,6 +31,28 @@ public static class WpfApplicationExtensions
     /// </remarks>
     /// <param name="services">The <see cref="IServiceCollection"/> to which the service will be added.</param>
     /// <returns>The updated <see cref="IServiceCollection"/> instance.</returns>
-    public static IServiceCollection UseDialog(this IServiceCollection services)
+    public static IServiceCollection UseDialogService(this IServiceCollection services)
         => services.AddSingleton<IDialogService, DialogService>();
+
+    /// <summary>
+    /// Adds the default implementation of <see cref="IPrintService"/> to the service collection.
+    /// </summary>
+    /// <remarks>
+    /// This method registers <see cref="PrintService"/> as a singleton implementation of <see cref="IPrintService"/>.
+    /// </remarks>
+    /// <param name="services">The <see cref="IServiceCollection"/> to which the service will be added.</param>
+    /// <returns>The updated <see cref="IServiceCollection"/> instance.</returns>
+    public static IServiceCollection UsePrintService(this IServiceCollection services)
+        => services.AddSingleton<IPrintService, PrintService>();
+
+    /// <summary>
+    /// Adds the default implementation of <see cref="IWindowService"/> to the service collection.
+    /// </summary>
+    /// <remarks>
+    /// This method registers <see cref="WindowService"/> as a singleton implementation of <see cref="IWindowService"/>.
+    /// </remarks>
+    /// <param name="services">The <see cref="IServiceCollection"/> to which the service will be added.</param>
+    /// <returns>The updated <see cref="IServiceCollection"/> instance.</returns>
+    public static IServiceCollection UseWindowService(this IServiceCollection services)
+        => services.AddSingleton<IWindowService, WindowService>();
 }

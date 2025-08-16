@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Tudormobile.Wpf.Services;
 
 namespace Tudormobile.Wpf;
 
@@ -12,8 +13,14 @@ namespace Tudormobile.Wpf;
 /// </summary>
 public partial class WpfApplication : System.Windows.Application
 {
+    private static CommandLine _commandLine = new();
     internal ServiceCollection _serviceCollection;
     internal IServiceProvider? _services;
+
+    /// <summary>
+    /// Provides access to the command line arguments passed to the application.
+    /// </summary>
+    public CommandLine CommandLine => _commandLine;
 
     /// <summary>
     /// Gets the service provider that resolves service dependencies.
@@ -72,7 +79,7 @@ public partial class WpfApplication : System.Windows.Application
     /// This method is intended to be overridden in derived classes to allow for custom logic to be executed
     /// when the main window of the application is created and activated for the first time.
     /// </remarks>
-    protected virtual void OnMainWindowCreated() { }
+    protected virtual void OnMainWindowCreated() => Wpf.Services.WindowService.TrySetDataContext(MainWindow);
 
     private void onActivated(object? sender, EventArgs e)
     {
@@ -81,12 +88,10 @@ public partial class WpfApplication : System.Windows.Application
         {
             // Invoke the OnMainWindowCreated method when the main window is activated for the first time.
             OnMainWindowCreated();
+            Services.GetService<IWindowService>()?.Windows.Add(MainWindow);
         }
     }
-
 }
-
-
 
 //old code
 #if false

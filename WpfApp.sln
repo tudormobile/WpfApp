@@ -10,6 +10,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WpfApp.Tests", "src\WpfApp.Tests\WpfApp.Tests.csproj", "{578FAD38-0341-4F13-9014-5978E9092E38}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{6C967C78-77FA-48AC-AB2B-97DFF947F676}"
+	ProjectSection(SolutionItems) = preProject
+		samples\README.md = samples\README.md
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WpfApp1", "samples\WpfApp1\WpfApp1.csproj", "{3F227464-94FE-434D-8886-4DF13652B6B5}"
 EndProject
