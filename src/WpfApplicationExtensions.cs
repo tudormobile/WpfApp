@@ -55,4 +55,16 @@ public static class WpfApplicationExtensions
     /// <returns>The updated <see cref="IServiceCollection"/> instance.</returns>
     public static IServiceCollection UseWindowService(this IServiceCollection services)
         => services.AddSingleton<IWindowService, WindowService>();
+
+    /// <summary>
+    /// Adds the default implementation of <see cref="INavigationService{T}"/> to the service collection.
+    /// </summary>
+    /// <remarks>
+    /// This method registers <see cref="NavigationService{T}"/> as a singleton implementation of <see cref="INavigationService{T}"/>.
+    /// </remarks>
+    /// <param name="services">The <see cref="IServiceCollection"/> to which the service will be added.</param>
+    /// <returns>The updated <see cref="IServiceCollection"/> instance.</returns>
+    public static IServiceCollection UseNavigation<T>(this IServiceCollection services)
+        => services.AddSingleton<INavigationService<T>, NavigationService<T>>();
+
 }
