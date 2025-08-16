@@ -11,6 +11,6 @@ _layout: landing
 - [API Documentation](api/Tudormobile.md)
 
 
-[`Source Code`](https://github.com/tudormobile/WpfApp) | [Nuget Package](https://github.com/users/tudormobile/packages/nuget/package/Tudormobile.WpfApp)  
+[Source Code](https://github.com/tudormobile/WpfApp) | [Nuget Package](https://github.com/users/tudormobile/packages/nuget/package/Tudormobile.WpfApp)  
 
 <support@tudormobile.com>
