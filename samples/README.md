@@ -31,4 +31,7 @@ protected override void OnStartup(StartupEventArgs e)
     - Uses both the application object and a number of services from the library.
 - WpfApp4
     - Similar to WpfApp3 but with some experimental features using reflection and attributes to automatically configure some ICommand instances. 
+
+- WpfApp5
+    - Demonstratoes the use of the IDialogService, FilePickers, and MessageBox commands.
     

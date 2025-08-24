@@ -30,7 +30,9 @@ internal class NavigationService<T> : INavigationService<T>
             result = item;
             return true;
         }
+#pragma warning disable CS8601 // Possible null reference assignment.
         result = default;
+#pragma warning restore CS8601 // Possible null reference assignment.
         return false;
     }
 
@@ -44,7 +46,7 @@ internal class NavigationService<T> : INavigationService<T>
     /// <inheritdoc/>
     public bool TryNavigateBack(out T result)
     {
-        if (_backStack.TryPop(out result))
+        if (_backStack.TryPop(out result!))
         {
             _forwardStack.Push(_current!);
             _current = result;
@@ -56,7 +58,7 @@ internal class NavigationService<T> : INavigationService<T>
     /// <inheritdoc/>
     public bool TryNavigateForward(out T result)
     {
-        if (_forwardStack.TryPop(out result))
+        if (_forwardStack.TryPop(out result!))
         {
             _backStack.Push(_current!);
             _current = result;
