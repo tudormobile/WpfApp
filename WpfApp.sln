@@ -24,6 +24,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfApp4", "samples\WpfApp4\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfApp0", "samples\WpfApp0\WpfApp0.csproj", "{B697FF95-2B68-419F-9CD8-0CBE8805B797}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfApp5", "samples\WpfApp5\WpfApp5.csproj", "{B504B841-9695-4572-94C6-F5BF1B411E27}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -62,6 +64,10 @@ Global
 		{B697FF95-2B68-419F-9CD8-0CBE8805B797}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B697FF95-2B68-419F-9CD8-0CBE8805B797}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B697FF95-2B68-419F-9CD8-0CBE8805B797}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B504B841-9695-4572-94C6-F5BF1B411E27}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B504B841-9695-4572-94C6-F5BF1B411E27}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B504B841-9695-4572-94C6-F5BF1B411E27}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B504B841-9695-4572-94C6-F5BF1B411E27}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -72,6 +78,7 @@ Global
 		{AA7D1295-85F1-4F09-B725-DE8EEB8D64E0} = {6C967C78-77FA-48AC-AB2B-97DFF947F676}
 		{77385820-8400-5862-C4D3-E8344EFC70F3} = {6C967C78-77FA-48AC-AB2B-97DFF947F676}
 		{B697FF95-2B68-419F-9CD8-0CBE8805B797} = {6C967C78-77FA-48AC-AB2B-97DFF947F676}
+		{B504B841-9695-4572-94C6-F5BF1B411E27} = {6C967C78-77FA-48AC-AB2B-97DFF947F676}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {243DA763-7C0D-489D-BA93-9C7F8DCBD0FE}

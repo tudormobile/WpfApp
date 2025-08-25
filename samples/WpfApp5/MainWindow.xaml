@@ -1,0 +1,65 @@
+﻿<Window x:Class="WpfApp5.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfApp5"
+        xmlns:commands="clr-namespace:Tudormobile.Wpf.Commands;assembly=Tudormobile.WpfApp"
+        mc:Ignorable="d" x:Name="root"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <Grid.Resources>
+            <local:BindingProxy x:Key="Proxy" Data="{Binding}" />
+            <commands:SaveFilePickerCommandProxy x:Key="SaveCommandProxy" Command="{Binding SaveCommand}"/>
+            <commands:FilePickerParameters x:Key="SaveFileParameters" Command="{Binding SaveCommand}" FileName="{Binding SaveFilename}"/>
+            <commands:MessageBoxParameters x:Key="YesNoCancelParameters" Command="{Binding YesNoCancelCommand}" Text="This is a YesNo/Cancel message box." Caption="Question" Icon="Question" Button="YesNoCancel"/>
+        </Grid.Resources>
+        <StackPanel Orientation="Vertical">
+            <TextBlock Margin="30,4" Text="{Binding Message}" TextWrapping="Wrap"/>
+            <Separator Margin="4" MaxWidth="400" SnapsToDevicePixels="True"/>
+            <!-- This method uses a proxy object to allow binding to the datacontext of the window hosting the button -->
+            <Button Width = "120" Margin="4" Content="Open File Dialog">
+                <Button.Command>
+                    <commands:OpenFilePickerCommand/>
+                </Button.Command>
+                <Button.CommandParameter>
+                    <commands:FilePickerParameters
+                        Title="{Binding Data.OpenFileTitle, Source={StaticResource Proxy}}"
+                        Filter="Text files (*.txt)|*.txt|All files (*.*)|*.*"
+                        Command="{Binding Data.OpenCommand, Source={StaticResource Proxy}}"
+                        />
+                </Button.CommandParameter>
+            </Button>
+            <!-- This method uses a command proxy to allow binding to the datacontext of the window hosting the button -->
+            <Button Width="120" Margin="4" Content="Save File Dialog" Command="{StaticResource SaveCommandProxy}"/>
+            <!-- This method uses command parameter resources in order to bind to the SaveCommand -->
+            <Button Width="120" Margin="4" Content="Save File Dialog Alt1" CommandParameter="{StaticResource SaveFileParameters}">
+                <Button.Command>
+                    <commands:SaveFilePickerCommand/>
+                </Button.Command>
+            </Button>
+            <TextBlock Text="{Binding SaveFilename, StringFormat='{}Filename for Alt1 = {0}'}" />
+            <!-- MessageBox Examples -->
+            <Button Width="210" Margin="4" Content="Show Message Box (Info)" Command="{Binding ShowMessageBoxCommand}" CommandParameter="{Binding ShowMessageBoxCommandParameter}" />
+            <Button Width="210" Margin="4" Content="Show Message Box (Yes/NoCancel)" CommandParameter="{StaticResource YesNoCancelParameters}">
+                <Button.Command>
+                    <commands:MessageBoxCommand/>
+                </Button.Command>
+            </Button>
+            <Button Width="210" Margin="4" Content="Show Message Box (Yes/NoCancel)">
+                <Button.Command>
+                    <commands:MessageBoxCommandProxy Command="{Binding YesNoCancelCommand}"/>
+                </Button.Command>
+                <Button.CommandParameter>
+                    <commands:MessageBoxParameters
+                        Text="This is a YesNo/Cancel message box." 
+                        Caption="Question" Icon="Question" Button="YesNoCancel" />
+                </Button.CommandParameter>
+            </Button>
+            <Separator Margin="30,4"/>
+            <CheckBox IsChecked="False" Content="Show Content Dialog" Margin="4"/>
+
+        </StackPanel>
+
+    </Grid>
+</Window>

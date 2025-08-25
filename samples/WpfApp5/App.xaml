@@ -1,0 +1,10 @@
+﻿<wpf:WpfApplication x:Class="WpfApp5.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:WpfApp5"
+             xmlns:wpf="clr-namespace:Tudormobile.Wpf;assembly=Tudormobile.WpfApp"
+             StartupUri="MainWindow.xaml">
+    <wpf:WpfApplication.Resources>
+         
+    </wpf:WpfApplication.Resources>
+</wpf:WpfApplication>

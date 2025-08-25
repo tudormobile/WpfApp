@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
 using Tudormobile.Wpf.Converters;
@@ -15,8 +9,14 @@ namespace Tudormobile.Wpf.Commands
     /// Message box (dialog) parameters.
     /// </summary>
     [TypeConverter(typeof(MessageBoxParametersConverter))]
-    public class MessageBoxParameters : DependencyObject
+    public class MessageBoxParameters : Freezable
     {
+        /// <inheritdoc/>
+        protected override Freezable CreateInstanceCore()
+        {
+            return new MessageBoxParameters();
+        }
+
         /// <summary>
         /// Gets or sets the text to display.
         /// </summary>
@@ -90,8 +90,10 @@ namespace Tudormobile.Wpf.Commands
         /// Gets or sets the default result of the message box.
         /// </summary>
         public static readonly DependencyProperty ResultProperty = DependencyProperty
-            .Register(nameof(Result), typeof(MessageBoxResult), typeof(MessageBoxParameters), new PropertyMetadata(MessageBoxResult.None));
-
+            .Register(nameof(Result),
+            typeof(MessageBoxResult),
+            typeof(MessageBoxParameters),
+            new FrameworkPropertyMetadata(MessageBoxResult.None, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
         /// <summary>
         /// Gets or sets the message box results command.

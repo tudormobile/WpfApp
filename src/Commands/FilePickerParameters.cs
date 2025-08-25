@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Input;
 
 namespace Tudormobile.Wpf.Commands
@@ -11,8 +6,14 @@ namespace Tudormobile.Wpf.Commands
     /// <summary>
     /// File Picker (dialog) parameters.
     /// </summary>
-    public class FilePickerParameters : DependencyObject
+    public class FilePickerParameters : Freezable
     {
+        /// <inheritdoc/>
+        protected override Freezable CreateInstanceCore()
+        {
+            return new FilePickerParameters();
+        }
+
         /// <summary>
         /// Gets or sets the file dialog box title.
         /// </summary>
@@ -71,7 +72,7 @@ namespace Tudormobile.Wpf.Commands
         /// Gets or sets a string containing the file name selected in the file dialog box.
         /// </summary>
         public static readonly DependencyProperty FileNameProperty = DependencyProperty
-            .Register(nameof(FileName), typeof(string), typeof(FilePickerParameters), new PropertyMetadata(String.Empty));
+            .Register(nameof(FileName), typeof(string), typeof(FilePickerParameters), new FrameworkPropertyMetadata(String.Empty, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
     }
 }
