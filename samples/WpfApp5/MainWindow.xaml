@@ -57,7 +57,7 @@
                 </Button.CommandParameter>
             </Button>
             <Separator Margin="30,4"/>
-            <CheckBox IsChecked="False" Content="Show Content Dialog" Margin="4"/>
+            <TextBox Text="This is text in a textbox" Margin="10,4"/>
 
         </StackPanel>
 

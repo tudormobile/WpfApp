@@ -35,3 +35,5 @@ dotnet_naming_rule.private_methods_are_camel_case.style = private_method_style
 
 dotnet_naming_symbols.private_method_symbol.applicable_kinds = method
 dotnet_naming_symbols.private_method_symbol.applicable_accessibilities = private
+
+dotnet_diagnostic.MSTEST0006.severity = none
