@@ -12,6 +12,7 @@ namespace WpfApp5
         {
             services.UseDialogService();
             services.AddTransient<MainWindowModel>();
+            services.UseTextBoxServices();
         }
     }
 

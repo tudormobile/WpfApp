@@ -67,4 +67,13 @@ public static class WpfApplicationExtensions
     public static IServiceCollection UseNavigation<T>(this IServiceCollection services)
         => services.AddSingleton<INavigationService<T>, NavigationService<T>>();
 
+    /// <summary>
+    /// Registers the services required for text box extensions, such as select all text on focus, in the dependency injection container.
+    /// </summary>
+    /// <remarks>This method adds a singleton implementation of <see cref="ITextBoxService"/> using the <see
+    /// cref="TextBoxService"/> class.</remarks>
+    /// <param name="services">The <see cref="IServiceCollection"/> to which the text box services will be added.</param>
+    /// <returns>The <see cref="IServiceCollection"/> instance with the text box services registered.</returns>
+    public static IServiceCollection UseTextBoxServices(this IServiceCollection services)
+        => services.AddSingleton<ITextBoxService, TextBoxService>();
 }
