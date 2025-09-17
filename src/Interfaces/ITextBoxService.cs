@@ -7,7 +7,7 @@
 /// You must register an implementation of this interface with the service collection,
 /// and then call the Register() method in your application's OnStartup override. This
 /// is done automatically if you use the UseTextBoxServices extension method in your
-/// initializtion code.
+/// initialization code.
 /// </para>
 /// </summary>
 internal interface ITextBoxService
