@@ -50,7 +50,7 @@ public static class WpfExtensions
     /// <returns>The first child of type <typeparamref name="T"/> if found; otherwise, <see langword="null"/>.</returns>
     public static T? GetChild<T>(this DependencyObject obj)
         where T : notnull, DependencyObject
-        => (T?)obj.GetChildren().First(x => x is T);
+        => (T?)obj.GetChildren().FirstOrDefault(x => x is T);
 
     /// <summary>
     /// Retrieves the first child of the specified type from the visual tree of the given <see
