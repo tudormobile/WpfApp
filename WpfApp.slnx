@@ -1,0 +1,14 @@
+<Solution>
+  <Folder Name="/samples/">
+    <File Path="samples/README.md" />
+    <Project Path="samples/WpfApp0/WpfApp0.csproj" />
+    <Project Path="samples/WpfApp1/WpfApp1.csproj" />
+    <Project Path="samples/WpfApp2/WpfApp2.csproj" />
+    <Project Path="samples/WpfApp3/WpfApp3.csproj" />
+    <Project Path="samples/WpfApp4/WpfApp4.csproj" />
+    <Project Path="samples/WpfApp5/WpfApp5.csproj" />
+  </Folder>
+  <Project Path="src/WpfApp.APITests/WpfApp.APITests.csproj" />
+  <Project Path="src/WpfApp.csproj" />
+  <Project Path="src/WpfApp.Tests/WpfApp.Tests.csproj" />
+</Solution>

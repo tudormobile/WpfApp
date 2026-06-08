@@ -136,11 +136,11 @@ namespace WpfAppAPITests
             Assert.AreEqual(expected, actual);
         }
 
-        [TestMethod, ExcludeFromCodeCoverage, ExpectedException(typeof(NotSupportedException))]
+        [TestMethod, ExcludeFromCodeCoverage]
         public void ConvertToInvalidType()
         {
             var target = new MessageBoxParametersConverter();
-            _ = target.ConvertTo(null, typeof(object));
+            Assert.ThrowsExactly<NotSupportedException>(() => target.ConvertTo(null, typeof(object)));
         }
     }
 }

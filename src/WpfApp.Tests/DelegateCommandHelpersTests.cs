@@ -23,12 +23,12 @@ public class DelegateCommandHelpersTests
         actual.DynamicInvoke();
 
     }
-    [TestMethod, ExcludeFromCodeCoverage, ExpectedException(typeof(NotSupportedException))]
+    [TestMethod, ExcludeFromCodeCoverage]
     public void CreateAsyncDelegateTest()
     {
         // not supported (for now)
-        _ = DelegateCommandHelpers.CreateDelegate(this, this.GetType().GetMethod(nameof(AsyncVoidMethod)));
-        // throws (for now)
+        Assert.ThrowsExactly<NotSupportedException>(() => 
+            DelegateCommandHelpers.CreateDelegate(this, this.GetType().GetMethod(nameof(AsyncVoidMethod))));
     }
 
     [TestMethod]
@@ -98,20 +98,20 @@ public class DelegateCommandHelpersTests
         actual.Execute("must be string because CanExecute takes a string");
     }
 
-    [TestMethod, ExcludeFromCodeCoverage, ExpectedException(typeof(NotSupportedException))]
+    [TestMethod, ExcludeFromCodeCoverage]
     public void CreateDelegateCommandWithNotSupportedSignatureTest()
     {
-        var actual = DelegateCommandHelpers.CreateDelegateCommand(this,
-            this.GetType().GetMethod(nameof(NotSupportedMethod)),
-            this.GetType().GetMethod(nameof(BoolMethodWithParameter)));
-        // throws
+        Assert.ThrowsExactly<NotSupportedException>(() => 
+            DelegateCommandHelpers.CreateDelegateCommand(this,
+                this.GetType().GetMethod(nameof(NotSupportedMethod)),
+                this.GetType().GetMethod(nameof(BoolMethodWithParameter))));
     }
 
-    [TestMethod, ExcludeFromCodeCoverage, ExpectedException(typeof(NullReferenceException))]
+    [TestMethod, ExcludeFromCodeCoverage]
     public void CreateDelegateCommandWithNullMethodsTest()
     {
-        var actual = DelegateCommandHelpers.CreateDelegateCommand(this, null, null);
-        // throws
+        Assert.ThrowsExactly<NullReferenceException>(() => 
+            DelegateCommandHelpers.CreateDelegateCommand(this, null, null));
     }
 
     [ExcludeFromCodeCoverage]

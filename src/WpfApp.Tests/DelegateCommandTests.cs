@@ -52,12 +52,12 @@ namespace WpfAppTests
             Assert.AreEqual(expected, actual);
         }
 
-        [TestMethod, ExcludeFromCodeCoverage, ExpectedException(typeof(TargetParameterCountException))]
+        [TestMethod, ExcludeFromCodeCoverage]
         public void ExecuteWithWrongTypeTest()
         {
             object expected = new object();
             var target = new DelegateCommand(nullActionObject);
-            target.Execute(null);   // throws
+            Assert.ThrowsExactly<TargetParameterCountException>(() => target.Execute(null));
         }
 
         [TestMethod]
@@ -79,12 +79,12 @@ namespace WpfAppTests
         }
 
 
-        [TestMethod, ExcludeFromCodeCoverage, ExpectedException(typeof(InvalidCastException))]
+        [TestMethod, ExcludeFromCodeCoverage]
         public void GenericExecuteWithWrongTypeTest()
         {
             object expected = new object();
             var target = new DelegateCommand<string>(doNothing);
-            target.Execute(expected);   // throws
+            Assert.ThrowsExactly<InvalidCastException>(() => target.Execute(expected));
         }
 
         [TestMethod]
