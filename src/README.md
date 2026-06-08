@@ -16,7 +16,7 @@ You can also use Visual Studio to load the solution, build, and run unit tests.
 ## Source Code Structure
 
 ### Solution and Projects
-- **WpfApp.sln** - Visual Studio solution
+- **WpfApp.slnx** - Visual Studio solution
 - **src\WpfApp.csproj** - Project file
 - **src\WpfApp.APITests\WpfApp.APITests.csproj** - Unit tests for the **public** API
 - **src\WpfApp.Tests\WpfApp.Test.csproj** - Unit tests covering internal members and other non-public code.
